@@ -7,7 +7,7 @@ A shared vocabulary for knowledge, governance, and code intelligence.
 - [Human-readable catalog](https://scbrown.github.io/quechua/ns)
 - [Turtle vocabulary](https://scbrown.github.io/quechua/ns.ttl)
 
-The initial catalog declares 127 classes and 284 properties extracted from
+The catalog declares 129 classes and 296 properties extracted from
 seven loaded shape sets. It is an initial publication, not a complete validation
 schema. Publishing these declarations does not migrate a store, enable
 inference, or change instance identifiers.
