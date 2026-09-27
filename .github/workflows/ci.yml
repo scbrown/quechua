@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  vocabulary:
+    name: Validate vocabulary
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.0"
+          python-version: "3.12"
+          enable-cache: false
+      - name: Validate catalog and failure controls
+        run: uv run --locked --script scripts/check_catalog.py --selftest
