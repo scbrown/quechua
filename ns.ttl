@@ -1,6 +1,11 @@
 @prefix quechua: <https://scbrown.github.io/quechua/ns#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# The release this catalog is. Bumped with a CHANGELOG section; the release
+# lane refuses a tag that disagrees with it.
+<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.1.0" .
 
 <https://scbrown.github.io/quechua/ns#APIEndpoint> a rdfs:Class ; rdfs:label "APIEndpoint" .
 <https://scbrown.github.io/quechua/ns#AgentTool> a rdfs:Class ; rdfs:label "AgentTool" .

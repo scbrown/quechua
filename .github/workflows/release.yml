@@ -1,0 +1,52 @@
+name: Release
+
+# Tag-triggered (aegis-1i5h1j.3). Pages serves ns.ttl from main, a moving
+# target nobody can pin. A release publishes an immutable, digest-listed copy:
+# consumers (caboodle first) pin quechua-ns-vX.Y.Z.ttl by the SHA-256 they
+# reviewed, never the Pages URL.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.0"
+          python-version: "3.12"
+          enable-cache: false
+
+      # The same validator as CI, plus: the tag must equal the catalog's own
+      # owl:versionInfo, and its CHANGELOG section becomes the release notes.
+      # Either check failing publishes nothing.
+      - name: Validate, match the tag, extract notes
+        run: |
+          uv run --locked --script scripts/check_catalog.py --selftest \
+            --expect-version "$GITHUB_REF_NAME" --notes "$RUNNER_TEMP/notes.md"
+
+      - name: Assets and checksums
+        run: |
+          set -euo pipefail
+          mkdir dist
+          cp ns.ttl "dist/quechua-ns-$GITHUB_REF_NAME.ttl"
+          cd dist
+          sha256sum "quechua-ns-$GITHUB_REF_NAME.ttl" > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Quechua vocabulary $GITHUB_REF_NAME" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            dist/quechua-ns-*.ttl dist/SHA256SUMS.txt
