@@ -12,6 +12,19 @@ here, and each release publishes that section as its notes.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-07
+
+### Added
+
+- `shapes/camayoc.shapes.ttl`: Decision, Verification, ExecutionPath,
+  NonFunctionalRequirement, Metric and its derivation, the golden-path records
+  (Trajectory, Step, GoldenPath, PathOmission, PathPromotion), Session,
+  UsageRecord, review ages and IRI-valued ownership. As with the work-item
+  shapes, they are the shapes a live store enforces with only the namespace
+  renamed.
+- A conforming camayoc example and fifteen invalid variants of it.
+- Releases publish every shapes file as `quechua-<name>-shapes-vX.Y.Z.ttl`.
+
 ## [0.2.0] - 2026-10-06
 
 ### Added
@@ -39,6 +52,7 @@ here, and each release publishes that section as its notes.
 - Tagged releases: `quechua-ns-vX.Y.Z.ttl` and `SHA256SUMS.txt`, so consumers
   pin a digest instead of the moving Pages copy.
 
-[Unreleased]: https://github.com/scbrown/quechua/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/scbrown/quechua/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/scbrown/quechua/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/scbrown/quechua/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/scbrown/quechua/releases/tag/v0.1.0
