@@ -1,0 +1,38 @@
+# A conforming tracker projection: two work items, one blocked on the other
+# and on a kinded blocker, with a tracker observation about the first.
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/tracker/> .
+
+ex:run-1 a quechua:WorkflowRun ; rdfs:label "release run" .
+
+ex:item-1 a quechua:WorkItem ;
+    rdfs:label "Publish the vocabulary" ;
+    quechua:sourceKind "observed" ;
+    quechua:blockedOn ex:item-2 , ex:pr-blocker ;
+    quechua:inWorkflowRun ex:run-1 ;
+    quechua:touchesRepo ex:repo-vocabulary ;
+    quechua:grantsAction "edit" , "commit" , "push" ;
+    quechua:scopeProvenance "declared" .
+
+ex:item-2 a quechua:WorkItem ;
+    rdfs:label "Review the shapes" ;
+    quechua:sourceKind "observed" ;
+    quechua:outcome "done" .
+
+ex:pr-blocker a quechua:Blocker ;
+    rdfs:label "Waiting on the shapes pull request" ;
+    quechua:sourceKind "declared" ;
+    quechua:blockerEvidence "stated" ;
+    quechua:blockerKind "pr-merged" ;
+    quechua:prRef "example/vocabulary#4" .
+
+ex:obs-1 a quechua:Observation ;
+    rdfs:label "tracker status of item-1" ;
+    quechua:sourceKind "observed" ;
+    quechua:about ex:item-1 ;
+    quechua:observedAt "2026-10-06T23:00:00Z" ;
+    quechua:observedValue "open" ;
+    quechua:observedStatus "open" ;
+    quechua:observedBlockedOn ex:item-2 .
