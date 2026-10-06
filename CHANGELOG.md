@@ -12,7 +12,7 @@ here, and each release publishes that section as its notes.
 
 ## [Unreleased]
 
-## [0.4.0] - 2026-10-07
+## [0.4.0] - 2026-10-06
 
 ### Added
 
@@ -29,7 +29,7 @@ here, and each release publishes that section as its notes.
   `parentCollection`, `relativePath`, `result`, `trackedBy` and `verifiedAt`.
 - A conforming ontology example and eleven invalid variants of it.
 
-## [0.3.0] - 2026-10-07
+## [0.3.0] - 2026-10-06
 
 ### Added
 
