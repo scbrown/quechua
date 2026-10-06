@@ -5,7 +5,7 @@
 
 # The release this catalog is. Bumped with a CHANGELOG section; the release
 # lane refuses a tag that disagrees with it.
-<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.1.0" .
+<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.2.0" .
 
 <https://scbrown.github.io/quechua/ns#APIEndpoint> a rdfs:Class ; rdfs:label "APIEndpoint" .
 <https://scbrown.github.io/quechua/ns#AgentTool> a rdfs:Class ; rdfs:label "AgentTool" .
@@ -263,6 +263,7 @@
 <https://scbrown.github.io/quechua/ns#inRun> a rdf:Property ; rdfs:label "inRun" .
 <https://scbrown.github.io/quechua/ns#inSession> a rdf:Property ; rdfs:label "inSession" .
 <https://scbrown.github.io/quechua/ns#inStep> a rdf:Property ; rdfs:label "inStep" .
+<https://scbrown.github.io/quechua/ns#inWorkflowRun> a rdf:Property ; rdfs:label "inWorkflowRun" .
 <https://scbrown.github.io/quechua/ns#in_repo> a rdf:Property ; rdfs:label "in_repo" .
 <https://scbrown.github.io/quechua/ns#indexes> a rdf:Property ; rdfs:label "indexes" .
 <https://scbrown.github.io/quechua/ns#inheritedByDelegates> a rdf:Property ; rdfs:label "inheritedByDelegates" .

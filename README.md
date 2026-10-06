@@ -6,14 +6,27 @@ A shared vocabulary for knowledge, governance, and code intelligence.
 - Prefix: `quechua:`
 - [Human-readable catalog](https://scbrown.github.io/quechua/ns)
 - [Turtle vocabulary](https://scbrown.github.io/quechua/ns.ttl)
+- [Work-item SHACL shapes](https://scbrown.github.io/quechua/shapes/work-item.shapes.ttl)
 
-The catalog declares 129 classes and 296 properties extracted from
-seven loaded shape sets. It is an initial publication, not a complete validation
+The catalog declares 129 classes and 297 properties extracted from
+the loaded shape sets. It is an initial publication, not a complete validation
 schema. Publishing these declarations does not migrate a store, enable
 inference, or change instance identifiers.
 
 Instance identifiers remain independent of the vocabulary namespace. Existing
 integrations need compatibility checks before changing the terms they use.
+
+## Shapes
+
+`shapes/` holds SHACL shapes over the catalog's terms. The first set,
+`work-item.shapes.ttl`, covers tracker-agnostic work: a `WorkItem`, the scope
+it grants, the `Blocker`s it waits on, and the `Observation`s a tracker
+projection records. `shapes/examples/` has a conforming example.
+
+The shapes keep their deliberate posture: strict on the `sourceKind`
+provenance tag, permissive elsewhere. Scope is optional, because unknown scope
+advises and never blocks. Shape IRIs share the namespace but are not
+vocabulary terms.
 
 ## Releases and pinning
 
@@ -29,6 +42,10 @@ its extensionless URL must be checked after deployment. It links to `ns.ttl`
 as its machine-readable alternative.
 
 ## Validation
+
+Run `uv run --locked --script scripts/check_shapes.py --selftest` to check that
+every term a shape uses is declared in `ns.ttl`, and that the conforming example
+validates while eleven invalid examples each fail on the constraint they break.
 
 Run `uv run --locked --script scripts/check_catalog.py --selftest` to parse the
 Turtle, check declaration types and labels, and compare its terms with the HTML

@@ -24,3 +24,5 @@ jobs:
           enable-cache: false
       - name: Validate catalog and failure controls
         run: uv run --locked --script scripts/check_catalog.py --selftest
+      - name: Validate shapes, examples and failure controls
+        run: uv run --locked --script scripts/check_shapes.py --selftest

@@ -1,0 +1,236 @@
+# Quechua work-item shapes
+#
+# SHACL shapes for tracker-agnostic work: a WorkItem, the scope it grants,
+# what it is blocked on, and the observations a tracker projection records
+# about it. Any issue tracker can be projected into these shapes; a bead store
+# is one such source.
+#
+# Posture: PERMISSIVE on domain shape, STRICT on the provenance tag.
+# sourceKind is a reader's only signal of trust, so it is closed-vocabulary
+# and mandatory. Domain properties start permissive and tighten deliberately.
+#
+# These shapes reference terms declared in the catalog at
+# https://scbrown.github.io/quechua/ns.ttl. Shape IRIs share the namespace but
+# are not vocabulary terms. Validating data against them does not migrate a
+# store or change instance identifiers.
+
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# ── WorkItem ─────────────────────────────────────────────────────
+#
+# outcome is terminal-only: absence means open. A decaying "in progress"
+# value is never stored, because it is false as soon as work stops.
+
+quechua:CamayocWorkItemShape a sh:NodeShape ;
+    sh:targetClass quechua:WorkItem ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every WorkItem carries exactly one sourceKind of observed|declared|inferred — the tag is the reader's only signal of trust" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a WorkItem needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:outcome ;
+        sh:maxCount 1 ;
+        sh:in ("done" "abandoned" "superseded" "failed") ;
+        sh:message "camayoc: outcome, when set, is one of done|abandoned|superseded|failed — absence means open; never store a decaying 'in progress'" ;
+    ] ;
+    sh:property [
+        sh:path quechua:blockedOn ;
+        sh:or ( [ sh:class quechua:WorkItem ] [ sh:class quechua:Blocker ] ) ;
+        sh:message "camayoc: blockedOn must point at a WorkItem or a Blocker the graph actually holds — an unresolvable target is a blocker nobody can clear" ;
+    ] ;
+    sh:property [
+        sh:path quechua:inWorkflowRun ;
+        sh:maxCount 1 ;
+        sh:class quechua:WorkflowRun ;
+        sh:message "camayoc: inWorkflowRun, when set, names exactly one WorkflowRun the graph holds — a work item that cannot find its run cannot advance it" ;
+    ] .
+
+# ── WorkItem scope ───────────────────────────────────────────────
+#
+# What a work item licenses its worker to change. Three deliberate choices:
+#
+# 1. Every scope property is optional. Unknown scope ADVISES, it never
+#    blocks. A guard that reads absence as denial refuses work that was never
+#    annotated. The single required label is the floor every targetClass
+#    shape needs, and it matches the WorkItem shape above.
+# 2. grantsAction excludes "read". Scope governs mutation, not observation:
+#    investigation legitimately reads far outside a work item's scope, and an
+#    ungrantable action cannot be denied.
+# 3. touches* are IRIs, not strings. They name referents that already exist
+#    in the graph rather than minting a second, string-valued vocabulary.
+
+quechua:WorkItemScopeShape a sh:NodeShape ;
+    sh:targetClass quechua:WorkItem ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path quechua:touchesRepo ;
+        sh:minCount 0 ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path quechua:touchesHost ;
+        sh:minCount 0 ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path quechua:touchesService ;
+        sh:minCount 0 ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path quechua:grantsAction ;
+        sh:minCount 0 ;
+        sh:datatype xsd:string ;
+        sh:in ( "edit" "commit" "push" "deploy" "restart" "delete" ) ;
+    ] ;
+    sh:property [
+        sh:path quechua:scopeProvenance ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:in ( "declared" "derived" "observed" ) ;
+    ] .
+
+# ── Blocker ──────────────────────────────────────────────────────
+#
+# A blocker must say whether its evidence is "stated" (a claim) or "built" (a
+# reproduction); a stated claim must never read as a built one. A KINDED
+# blocker is a condition work waits on, so it must carry the parameters its
+# kind's probe needs. An unkinded blocker is a stated reason. Probe code lives
+# with the consumer, never in the graph.
+
+quechua:CamayocBlockerShape a sh:NodeShape ;
+    sh:targetClass quechua:Blocker ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every Blocker carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Blocker needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:blockerEvidence ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("stated" "built") ;
+        sh:message "camayoc: a Blocker must say whether its evidence is stated or built" ;
+    ] ;
+    sh:property [
+        sh:path quechua:demonstratedBy ;
+        sh:class quechua:Verification ;
+        sh:message "camayoc: blocker demonstration must be a Verification" ;
+    ] ;
+    sh:property [
+        sh:path quechua:blockerKind ;
+        sh:maxCount 1 ;
+        sh:in ("release-installed" "pr-merged" "ci-green" "human-action" "date") ;
+        sh:message "camayoc: blockerKind is one of release-installed|pr-merged|ci-green|human-action|date" ;
+    ] ;
+    sh:property [
+        sh:path quechua:resolutionQuery ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Blocker carries at most one resolutionQuery (a SPARQL ASK)" ;
+    ] ;
+    sh:property [
+        sh:path quechua:resolvesOn ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:date ;
+        sh:message "camayoc: resolvesOn is one xsd:date" ;
+    ] ;
+    sh:or (
+        [ sh:path quechua:blockerKind ; sh:maxCount 0 ]
+        [ sh:and (
+            [ sh:path quechua:blockerKind ; sh:hasValue "pr-merged" ]
+            [ sh:path quechua:prRef ; sh:minCount 1 ; sh:maxCount 1 ;
+              sh:pattern "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[0-9]+$" ] ) ]
+        [ sh:and (
+            [ sh:path quechua:blockerKind ; sh:hasValue "release-installed" ]
+            [ sh:path quechua:tool ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[A-Za-z0-9_.-]+$" ]
+            [ sh:path quechua:minVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[0-9]+(\\.[0-9]+)*$" ] ) ]
+        [ sh:and (
+            [ sh:path quechua:blockerKind ; sh:hasValue "ci-green" ]
+            [ sh:path quechua:repoRef ; sh:minCount 1 ; sh:maxCount 1 ;
+              sh:pattern "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+@[A-Za-z0-9_./-]+$" ] ) ]
+        [ sh:and (
+            [ sh:path quechua:blockerKind ; sh:hasValue "human-action" ]
+            [ sh:path quechua:resolutionQuery ; sh:minCount 1 ] ) ]
+        [ sh:and (
+            [ sh:path quechua:blockerKind ; sh:hasValue "date" ]
+            [ sh:path quechua:resolvesOn ; sh:minCount 1 ] ) ]
+    ) ;
+    sh:message "camayoc: a kinded Blocker must carry its kind's probe parameters (pr-merged: prRef owner/repo#N; release-installed: tool + minVersion; ci-green: repoRef owner/repo@branch; human-action: resolutionQuery; date: resolvesOn)" .
+
+# ── Observation ──────────────────────────────────────────────────
+#
+# Three shapes target Observation. The first constrains the tracker-status
+# fields a projection records; observedBlockedOn may point at a work item that
+# has not been projected yet, so it is checked as an IRI, not by class. The
+# second requires an observed value with its subject and time. The third is
+# the general observation floor.
+
+quechua:CamayocTrackerObservationStatusShape a sh:NodeShape ;
+    sh:targetClass quechua:Observation ;
+    sh:property [
+        sh:path quechua:observedStatus ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: an Observation records at most one observedStatus" ;
+    ] ;
+    sh:property [
+        sh:path quechua:observedClosedAt ;
+        sh:maxCount 1 ;
+        sh:message "camayoc: an Observation records at most one observedClosedAt" ;
+    ] ;
+    sh:property [
+        sh:path quechua:observedBlockedOn ;
+        sh:nodeKind sh:IRI ;
+        sh:message "camayoc: observedBlockedOn points at a work item IRI (it may be projected before its target is)" ;
+    ] .
+
+quechua:CamayocObservationShape a sh:NodeShape ;
+    sh:targetClass quechua:Observation ;
+    sh:property [ sh:path quechua:sourceKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("observed") ] ;
+    sh:property [ sh:path rdfs:label ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:about ; sh:minCount 1 ] ;
+    sh:property [ sh:path quechua:observedAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:observedValue ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+quechua:ObservationShape a sh:NodeShape ;
+    sh:targetClass quechua:Observation ;
+    sh:property [
+        sh:path quechua:source ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path quechua:confidence ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+    ] .
