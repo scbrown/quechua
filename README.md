@@ -7,6 +7,7 @@ A shared vocabulary for knowledge, governance, and code intelligence.
 - [Human-readable catalog](https://scbrown.github.io/quechua/ns)
 - [Turtle vocabulary](https://scbrown.github.io/quechua/ns.ttl)
 - [Work-item SHACL shapes](https://scbrown.github.io/quechua/shapes/work-item.shapes.ttl)
+- [Camayoc SHACL shapes](https://scbrown.github.io/quechua/shapes/camayoc.shapes.ttl)
 
 The catalog declares 129 classes and 297 properties extracted from
 the loaded shape sets. It is an initial publication, not a complete validation
@@ -21,7 +22,10 @@ integrations need compatibility checks before changing the terms they use.
 `shapes/` holds SHACL shapes over the catalog's terms. The first set,
 `work-item.shapes.ttl`, covers tracker-agnostic work: a `WorkItem`, the scope
 it grants, the `Blocker`s it waits on, and the `Observation`s a tracker
-projection records. `shapes/examples/` has a conforming example.
+projection records. `camayoc.shapes.ttl` covers the records a reader trusts:
+decisions, verifications, execution paths, requirements and metrics, golden
+paths and cost accounting. `shapes/examples/` has a conforming example for
+each file.
 
 The shapes keep their deliberate posture: strict on the `sourceKind`
 provenance tag, permissive elsewhere. Scope is optional, because unknown scope
@@ -44,8 +48,8 @@ as its machine-readable alternative.
 ## Validation
 
 Run `uv run --locked --script scripts/check_shapes.py --selftest` to check that
-every term a shape uses is declared in `ns.ttl`, and that the conforming example
-validates while eleven invalid examples each fail on the constraint they break.
+every term a shape uses is declared in `ns.ttl`, and that the conforming examples
+validate while each invalid variant fails on the constraint it breaks.
 
 Run `uv run --locked --script scripts/check_catalog.py --selftest` to parse the
 Turtle, check declaration types and labels, and compare its terms with the HTML

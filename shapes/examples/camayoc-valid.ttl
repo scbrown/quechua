@@ -1,0 +1,101 @@
+# A conforming set of camayoc records: a decision with its review age, a
+# verification and its adversarial proof, an execution path, a requirement
+# with its metric, a golden path with its exemplar, and cost accounting.
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix quipu:   <http://quipu.dev/ontology/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/records/> .
+
+ex:alice a quechua:Principal ; rdfs:label "alice" .
+
+ex:decision-1 a quechua:Decision ;
+    rdfs:label "Publish shapes per file" ;
+    quechua:sourceKind "declared" ;
+    quechua:chose "one file per shape family" ;
+    quechua:reviewAfter "2027-01-01" ;
+    quechua:maxAge "P12W" .
+
+ex:verify-1 a quechua:Verification ;
+    rdfs:label "Public shapes match the enforced shapes" ;
+    quechua:sourceKind "observed" ;
+    quechua:falsifier "the renamed graph is not isomorphic to the enforced graph" ;
+    quechua:adversariallyProvenBy ex:verify-2 .
+
+ex:verify-2 a quechua:Verification ;
+    rdfs:label "A one-literal mutation breaks the match" ;
+    quechua:sourceKind "observed" ;
+    quechua:falsifier "the mutated file still matches" .
+
+ex:path-1 a quechua:ExecutionPath ;
+    rdfs:label "published shapes" ;
+    quechua:sourceKind "observed" ;
+    quechua:executesArtifact ex:served-file ;
+    quechua:repositorySource ex:repo-file ;
+    quechua:refreshedBy ex:pages-build .
+
+ex:nfr-1 a quechua:NonFunctionalRequirement ;
+    rdfs:label "Shapes are served" ;
+    quechua:sourceKind "declared" ;
+    quechua:about ex:path-1 ;
+    quechua:threshold "0.99" ;
+    quechua:unit "ratio" ;
+    quechua:measurementWindow "P7D" ;
+    quechua:ownedBy ex:alice ;
+    quechua:createdAt "2026-10-06T00:00:00Z" .
+
+ex:metric-1 a quechua:Metric ;
+    rdfs:label "served ratio" ;
+    quechua:sourceKind "declared" ;
+    quechua:unit "ratio" ;
+    quechua:meaning "share of probes answered 200" ;
+    quechua:ownedBy ex:alice ;
+    quechua:probe "HTTP GET of the shapes URL" ;
+    quechua:measuresRequirement ex:nfr-1 ;
+    quipu:derivedBy ex:derivation-1 ;
+    quechua:contentHash "sha256:0000" .
+
+ex:derivation-1 quipu:derivationSystem "prometheus" ;
+    quipu:derivationQuery "avg_over_time(probe_success[7d])" ;
+    quipu:derivationParams "{}" .
+
+ex:trajectory-1 a quechua:Trajectory ;
+    rdfs:label "first publication" ;
+    quechua:sourceKind "observed" .
+
+ex:step-1 a quechua:Step ;
+    rdfs:label "prove isomorphism" ;
+    quechua:sourceKind "observed" ;
+    quechua:stepOf ex:trajectory-1 .
+
+ex:golden-1 a quechua:GoldenPath ;
+    rdfs:label "publish a shape family" ;
+    quechua:sourceKind "declared" ;
+    quechua:prunedFrom ex:trajectory-1 .
+
+ex:omission-1 a quechua:PathOmission ;
+    rdfs:label "skip the manual diff" ;
+    quechua:sourceKind "declared" ;
+    quechua:omittedStep ex:step-1 ;
+    quechua:omissionAuthority "human-decision" .
+
+ex:promotion-1 a quechua:PathPromotion ;
+    rdfs:label "bless the publication path" ;
+    quechua:sourceKind "declared" ;
+    quechua:promotes ex:golden-1 ;
+    quechua:blessingLevel "advisory" ;
+    quechua:promotedBy ex:alice ;
+    quechua:promotedAt "2026-10-06T00:00:00Z" .
+
+ex:session-1 a quechua:Session ;
+    rdfs:label "publishing session" ;
+    quechua:sourceKind "observed" ;
+    quechua:actor ex:alice .
+
+ex:usage-1 a quechua:UsageRecord ;
+    rdfs:label "one request" ;
+    quechua:sourceKind "observed" ;
+    quechua:inSession ex:session-1 ;
+    quechua:provider "example" ;
+    quechua:tokensConsumed 1200 ;
+    quechua:observedAt "2026-10-06T00:00:00Z" .

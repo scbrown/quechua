@@ -19,7 +19,10 @@ from rdflib.namespace import Namespace
 NAMESPACE = "https://scbrown.github.io/quechua/ns#"
 Q = Namespace(NAMESPACE)
 EX = Namespace("https://example.org/tracker/")
-ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD))
+REC = Namespace("https://example.org/records/")
+# The Quipu engine's own namespace, for its derivation properties.
+QUIPU = Namespace("http://quipu.dev/ontology/")
+ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD), str(QUIPU))
 # Public shapes must not carry private infrastructure names.
 FORBIDDEN = re.compile(
     r"\.(lan|svc|local|internal)\b|\b(10|192\.168|172\.(1[6-9]|2\d|3[01]))\.\d+\.\d+",
@@ -29,7 +32,9 @@ FORBIDDEN = re.compile(
 # Each case removes or replaces ONE triple of the valid example and names the
 # constraint that must report it. A case that conforms, or fails somewhere
 # else, is a broken shape or a broken example.
-CASES = (
+WORK_ITEM = "work-item-valid.ttl"
+CAMAYOC = "camayoc-valid.ttl"
+_WORK_ITEM_CASES = (
     (
         "missing-sourceKind",
         (EX["item-1"], Q.sourceKind, Literal("observed")),
@@ -97,6 +102,119 @@ CASES = (
         Q.observedBlockedOn,
     ),
 )
+CASES = tuple((WORK_ITEM, *case) for case in _WORK_ITEM_CASES)
+
+CAMAYOC_CASES = (
+    (
+        CAMAYOC,
+        "decision-without-chose",
+        (REC["decision-1"], Q.chose, Literal("one file per shape family")),
+        None,
+        Q.chose,
+    ),
+    (
+        CAMAYOC,
+        "review-age-in-months",
+        (REC["decision-1"], Q.maxAge, Literal("P12W")),
+        (REC["decision-1"], Q.maxAge, Literal("P3M")),
+        Q.maxAge,
+    ),
+    (
+        CAMAYOC,
+        "verification-without-falsifier",
+        (REC["verify-2"], Q.falsifier, Literal("the mutated file still matches")),
+        None,
+        Q.falsifier,
+    ),
+    (
+        CAMAYOC,
+        "adversarial-proof-not-verification",
+        (REC["verify-1"], Q.adversariallyProvenBy, REC["verify-2"]),
+        (REC["verify-1"], Q.adversariallyProvenBy, REC["step-1"]),
+        Q.adversariallyProvenBy,
+    ),
+    (
+        CAMAYOC,
+        "execution-path-without-refresh",
+        (REC["path-1"], Q.refreshedBy, REC["pages-build"]),
+        None,
+        Q.refreshedBy,
+    ),
+    (
+        CAMAYOC,
+        "metric-without-derivation",
+        (REC["metric-1"], QUIPU.derivedBy, REC["derivation-1"]),
+        None,
+        QUIPU.derivedBy,
+    ),
+    (
+        CAMAYOC,
+        "derivation-without-query",
+        (
+            REC["derivation-1"],
+            QUIPU.derivationQuery,
+            Literal("avg_over_time(probe_success[7d])"),
+        ),
+        None,
+        QUIPU.derivationQuery,
+    ),
+    (
+        CAMAYOC,
+        "step-without-trajectory",
+        (REC["step-1"], Q.stepOf, REC["trajectory-1"]),
+        None,
+        Q.stepOf,
+    ),
+    (
+        CAMAYOC,
+        "golden-path-without-exemplar",
+        (REC["golden-1"], Q.prunedFrom, REC["trajectory-1"]),
+        None,
+        Q.prunedFrom,
+    ),
+    (
+        CAMAYOC,
+        "omission-without-authority",
+        (REC["omission-1"], Q.omissionAuthority, Literal("human-decision")),
+        (REC["omission-1"], Q.omissionAuthority, Literal("someone")),
+        Q.omissionAuthority,
+    ),
+    (
+        CAMAYOC,
+        "promotion-to-verified",
+        (REC["promotion-1"], Q.blessingLevel, Literal("advisory")),
+        (REC["promotion-1"], Q.blessingLevel, Literal("verified")),
+        Q.blessingLevel,
+    ),
+    (
+        CAMAYOC,
+        "declared-session",
+        (REC["session-1"], Q.sourceKind, Literal("observed")),
+        (REC["session-1"], Q.sourceKind, Literal("declared")),
+        Q.sourceKind,
+    ),
+    (
+        CAMAYOC,
+        "usage-count-as-string",
+        (REC["usage-1"], Q.tokensConsumed, Literal(1200)),
+        (REC["usage-1"], Q.tokensConsumed, Literal("1200")),
+        Q.tokensConsumed,
+    ),
+    (
+        CAMAYOC,
+        "usage-without-session",
+        (REC["usage-1"], Q.inSession, REC["session-1"]),
+        None,
+        Q.inSession,
+    ),
+    (
+        CAMAYOC,
+        "owner-as-string",
+        (REC["metric-1"], Q.ownedBy, REC["alice"]),
+        (REC["metric-1"], Q.ownedBy, Literal("alice")),
+        Q.ownedBy,
+    ),
+)
 
 
 def load_catalog(root: Path) -> tuple[set, set]:
@@ -140,17 +258,20 @@ def report(shapes: Graph, data: Graph) -> tuple[bool, set]:
 
 
 def check_examples(shapes: Graph, examples: Path) -> int:
-    valid = Graph().parse(examples / "work-item-valid.ttl")
-    conforms, paths = report(shapes, valid)
-    if not conforms:
-        raise ValueError(f"the valid example does not conform: {sorted(paths)}")
-    for name, remove, add, path in CASES:
-        if remove not in valid:
-            raise ValueError(
-                f"case {name}: the triple it removes is not in the example"
-            )
+    valid = {}
+    for path in sorted(examples.glob("*.ttl")):
+        graph = Graph().parse(path)
+        conforms, paths = report(shapes, graph)
+        if not conforms:
+            raise ValueError(f"{path.name} does not conform: {sorted(paths)}")
+        valid[path.name] = graph
+    cases = CASES + CAMAYOC_CASES
+    for example, name, remove, add, path in cases:
+        base = valid[example]
+        if remove not in base:
+            raise ValueError(f"case {name}: the triple it removes is not in {example}")
         data = Graph()
-        for triple in valid:
+        for triple in base:
             data.add(triple)
         data.remove(remove)
         if add:
@@ -161,7 +282,7 @@ def check_examples(shapes: Graph, examples: Path) -> int:
         if path is not None and path not in paths:
             raise ValueError(f"case {name} failed on {sorted(paths)}, not {path}")
         print(f"Rejected invalid example: {name}")
-    return len(CASES)
+    return len(valid), len(cases)
 
 
 def check(root: Path) -> None:
@@ -178,8 +299,8 @@ def check(root: Path) -> None:
     print(
         f"Shapes valid: {len(files)} file(s), {count} node shapes, all terms declared"
     )
-    cases = check_examples(shapes, root / "shapes" / "examples")
-    print(f"Valid example conforms; {cases} invalid examples rejected")
+    examples, cases = check_examples(shapes, root / "shapes" / "examples")
+    print(f"{examples} valid examples conform; {cases} invalid examples rejected")
 
 
 def selftest(root: Path) -> None:

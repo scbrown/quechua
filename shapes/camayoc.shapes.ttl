@@ -1,0 +1,406 @@
+# Quechua camayoc shapes
+#
+# SHACL shapes for the records a work-graph reader trusts: decisions,
+# verifications, execution paths, requirements and metrics, golden paths, and
+# cost accounting. The work-item shapes (WorkItem, Blocker, Observation) are
+# published separately in work-item.shapes.ttl.
+#
+# Posture: PERMISSIVE on domain shape, STRICT on the provenance tag.
+# sourceKind is a reader's only signal of trust, so it is closed-vocabulary
+# and mandatory. Domain properties start permissive and tighten deliberately.
+#
+# Terms are declared in https://scbrown.github.io/quechua/ns.ttl. The quipu:
+# derivation properties belong to the Quipu engine's own namespace. Shape IRIs
+# share the Quechua namespace but are not vocabulary terms.
+
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix quipu:   <http://quipu.dev/ontology/> .
+
+# ── Review age ───────────────────────────────────────────────────
+#
+# A declared review age must be machine-readable, or a scheduler can never
+# tell due from not-due. Any subject that declares one is checked; months and
+# years are refused, because their length is ambiguous.
+
+quechua:CamayocReviewAgeShape a sh:NodeShape ;
+    sh:targetSubjectsOf quechua:reviewAfter , quechua:maxAge ;
+    sh:property [
+        sh:path quechua:reviewAfter ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}:[0-9]{2}(:[0-9]{2}(\\.[0-9]+)?)?(Z|[+-][0-9]{2}:[0-9]{2}))?$" ;
+        sh:message "camayoc: reviewAfter is one ISO-8601 date or UTC-offset instant" ;
+    ] ;
+    sh:property [
+        sh:path quechua:maxAge ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^P([0-9]+W|[0-9]+D|([0-9]+D)?T([0-9]+H([0-9]+M)?|[0-9]+M))$" ;
+        sh:message "camayoc: maxAge is one ISO-8601 duration in weeks, days, hours or minutes (no months or years)" ;
+    ] .
+
+# ── Decision ─────────────────────────────────────────────────────
+
+quechua:CamayocDecisionShape a sh:NodeShape ;
+    sh:targetClass quechua:Decision ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every Decision carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Decision needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:chose ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Decision without 'chose' is not a decision — record what was chosen" ;
+    ] .
+
+# ── Verification ─────────────────────────────────────────────────
+#
+# Deliberately stricter than the WorkItem and Decision shapes: a
+# verification's whole claim to trust is that it names the result that could
+# have proved it wrong. This is an ingress obligation, not a convention for a
+# reader to remember.
+
+quechua:CamayocVerificationShape a sh:NodeShape ;
+    sh:targetClass quechua:Verification ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every Verification carries exactly one sourceKind of observed|declared|inferred — the tag is the reader's only signal of trust" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Verification needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:falsifier ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Verification without a falsifier is an assertion, not verification — record the result that would have proved it wrong" ;
+    ] ;
+    sh:property [
+        sh:path quechua:adversariallyProvenBy ;
+        sh:class quechua:Verification ;
+        sh:message "camayoc: an adversarial proof must itself be a Verification — sabotage that cannot name what flipping looks like proves nothing" ;
+    ] .
+
+# ── Execution path ───────────────────────────────────────────────
+#
+# Makes the running artifact and its refresh chain queryable. There is
+# intentionally no "isLive" field: live is a read-time verdict, while each
+# property here is an observed or declared fact that stays true later.
+
+quechua:CamayocExecutionPathShape a sh:NodeShape ;
+    sh:targetClass quechua:ExecutionPath ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every ExecutionPath carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: an ExecutionPath needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:executesArtifact ;
+        sh:minCount 1 ;
+        sh:message "camayoc: an ExecutionPath must name the artifact that actually executes" ;
+    ] ;
+    sh:property [
+        sh:path quechua:repositorySource ;
+        sh:minCount 1 ;
+        sh:message "camayoc: an ExecutionPath must name the repository source to compare with its executed artifact" ;
+    ] ;
+    sh:property [
+        sh:path quechua:refreshedBy ;
+        sh:minCount 1 ;
+        sh:message "camayoc: an ExecutionPath must name what refreshes its artifact" ;
+    ] .
+
+# ── Requirements and metrics ─────────────────────────────────────
+#
+# A non-functional requirement and the metric that measures it are declared;
+# a metric's value is derived by a named, reproducible query.
+
+quechua:CamayocNonFunctionalRequirementShape a sh:NodeShape ;
+    sh:targetClass quechua:NonFunctionalRequirement ;
+    sh:property [ sh:path quechua:sourceKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("declared") ] ;
+    sh:property [ sh:path rdfs:label ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:about ; sh:minCount 1 ] ;
+    sh:property [ sh:path quechua:threshold ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:unit ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:measurementWindow ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:ownedBy ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path quechua:createdAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+quechua:CamayocMetricShape a sh:NodeShape ;
+    sh:targetClass quechua:Metric ;
+    sh:property [ sh:path quechua:sourceKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("declared") ] ;
+    sh:property [ sh:path rdfs:label ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:unit ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:meaning ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:ownedBy ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path quechua:probe ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quechua:measuresRequirement ; sh:minCount 1 ; sh:maxCount 1 ; sh:class quechua:NonFunctionalRequirement ] ;
+    sh:property [ sh:path quipu:derivedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path quechua:contentHash ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+quechua:CamayocMetricDerivationShape a sh:NodeShape ;
+    sh:targetSubjectsOf quipu:derivationSystem ;
+    sh:property [ sh:path quipu:derivationSystem ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quipu:derivationQuery ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path quipu:derivationParams ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+# ── Golden paths ─────────────────────────────────────────────────
+#
+# Trajectories, the golden paths pruned from them, and their blessing. Strict
+# on the provenance tag and on the properties whose absence makes the node a
+# lie: a path without its exemplar, an omission without its authority, a
+# promotion without its promoter. Permissive on everything else.
+
+quechua:CamayocTrajectoryShape a sh:NodeShape ;
+    sh:targetClass quechua:Trajectory ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every Trajectory carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Trajectory needs exactly one rdfs:label" ;
+    ] .
+
+quechua:CamayocStepShape a sh:NodeShape ;
+    sh:targetClass quechua:Step ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every Step carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Step needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:stepOf ;
+        sh:minCount 1 ;
+        sh:message "camayoc: a Step must name its Trajectory — a step with no trajectory is an anecdote" ;
+    ] .
+
+quechua:CamayocGoldenPathShape a sh:NodeShape ;
+    sh:targetClass quechua:GoldenPath ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every GoldenPath carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a GoldenPath needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:prunedFrom ;
+        sh:minCount 1 ;
+        sh:message "camayoc: a GoldenPath must cite the exemplar Trajectory it was pruned from — a path that cannot cite the concrete success justifying it is an opinion" ;
+    ] .
+
+quechua:CamayocPathOmissionShape a sh:NodeShape ;
+    sh:targetClass quechua:PathOmission ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every PathOmission carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a PathOmission needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:omittedStep ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "camayoc: a PathOmission names exactly one omitted Step" ;
+    ] ;
+    sh:property [
+        sh:path quechua:omissionAuthority ;
+        sh:minCount 1 ;
+        sh:in ("cone-analysis" "human-decision") ;
+        sh:message "camayoc: an omission must carry its authority — cone-analysis or human-decision. An omission that cannot say who cut it is a silent edit of history" ;
+    ] .
+
+quechua:CamayocPathPromotionShape a sh:NodeShape ;
+    sh:targetClass quechua:PathPromotion ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ;
+        sh:message "camayoc: every PathPromotion carries exactly one sourceKind of observed|declared|inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a PathPromotion needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:promotes ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "camayoc: a PathPromotion names exactly one GoldenPath it promotes" ;
+    ] ;
+    sh:property [
+        sh:path quechua:blessingLevel ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("candidate" "advisory" "blessed" "constraint-backing") ;
+        sh:message "camayoc: a promotion's level is one of candidate|advisory|blessed|constraint-backing — recorded and verified are mechanical read-time states, not promotions" ;
+    ] ;
+    sh:property [
+        sh:path quechua:promotedBy ;
+        sh:minCount 1 ;
+        sh:message "camayoc: a promotion without its promoting principal is not a human act — nothing above verified happens without one" ;
+    ] ;
+    sh:property [
+        sh:path quechua:promotedAt ;
+        sh:minCount 1 ;
+        sh:message "camayoc: a promotion carries when it happened" ;
+    ] .
+
+# ── Cost and effort accounting ───────────────────────────────────
+#
+# Deterministic-parser facts, so sourceKind is pinned to "observed": a
+# declared or inferred usage number is not an account of consumption, it is an
+# estimate wearing one's clothes.
+
+quechua:CamayocSessionShape a sh:NodeShape ;
+    sh:targetClass quechua:Session ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed") ;
+        sh:message "camayoc: a Session is parsed from the harness's own record and enters as observed — Q19's denominator cannot be hand-declared" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a Session needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:actor ;
+        sh:minCount 1 ;
+        sh:message "camayoc: a Session names the principal that ran it — per-principal consumption (Q17, Q18) joins on this" ;
+    ] .
+
+quechua:CamayocUsageRecordShape a sh:NodeShape ;
+    sh:targetClass quechua:UsageRecord ;
+    sh:property [
+        sh:path quechua:sourceKind ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ("observed") ;
+        sh:message "camayoc: a UsageRecord is a deterministic-parser fact and enters as observed — never declared, never inferred" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a UsageRecord needs exactly one rdfs:label" ;
+    ] ;
+    sh:property [
+        sh:path quechua:inSession ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class quechua:Session ;
+        sh:message "camayoc: a UsageRecord is anchored to exactly one Session — an unattached record can join against nothing" ;
+    ] ;
+    sh:property [
+        sh:path quechua:provider ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a UsageRecord names its provider — Q17 and Q20 group by it" ;
+    ] ;
+    sh:property [
+        sh:path quechua:tokensConsumed ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:message "camayoc: a UsageRecord carries exactly one consumption count — a record without its measurement is nothing, and a missing measurement must stay missing, never aggregate as zero" ;
+    ] ;
+    sh:property [
+        sh:path quechua:observedAt ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "camayoc: a UsageRecord carries when the consumption happened — burn rate (Q20) is a read-time judgment over these timestamps" ;
+    ] ;
+    sh:property [
+        sh:path quechua:attributedTo ;
+        sh:class quechua:WorkItem ;
+        sh:message "camayoc: usage attribution, when present, points at a WorkItem — cost as a property of work, not of a window" ;
+    ] .
+
+# ── Ownership ────────────────────────────────────────────────────
+#
+# ownedBy names a principal, so its object is an IRI on every subject, not only
+# on the classes shaped above. A string owner is invisible to every reader that
+# joins the owner to a principal. Targeted by subject, so a new class that uses
+# ownedBy is covered without anyone remembering to add it here.
+
+quechua:CamayocOwnedByIsIriShape a sh:NodeShape ;
+    sh:targetSubjectsOf quechua:ownedBy ;
+    sh:property [
+        sh:path quechua:ownedBy ;
+        sh:nodeKind sh:IRI ;
+        sh:message "camayoc: quechua:ownedBy names a principal by IRI, never a string" ;
+    ] .

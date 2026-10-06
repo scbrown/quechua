@@ -41,7 +41,10 @@ jobs:
           set -euo pipefail
           mkdir dist
           cp ns.ttl "dist/quechua-ns-$GITHUB_REF_NAME.ttl"
-          cp shapes/work-item.shapes.ttl "dist/quechua-work-item-shapes-$GITHUB_REF_NAME.ttl"
+          for f in shapes/*.shapes.ttl; do
+            name=$(basename "$f" .shapes.ttl)
+            cp "$f" "dist/quechua-$name-shapes-$GITHUB_REF_NAME.ttl"
+          done
           cd dist
           sha256sum quechua-*-"$GITHUB_REF_NAME.ttl" > SHA256SUMS.txt
           cat SHA256SUMS.txt
