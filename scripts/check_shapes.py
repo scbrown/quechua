@@ -20,6 +20,7 @@ NAMESPACE = "https://scbrown.github.io/quechua/ns#"
 Q = Namespace(NAMESPACE)
 EX = Namespace("https://example.org/tracker/")
 REC = Namespace("https://example.org/records/")
+OG = Namespace("https://example.org/graph/")
 # The Quipu engine's own namespace, for its derivation properties.
 QUIPU = Namespace("http://quipu.dev/ontology/")
 ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD), str(QUIPU))
@@ -34,6 +35,7 @@ FORBIDDEN = re.compile(
 # else, is a broken shape or a broken example.
 WORK_ITEM = "work-item-valid.ttl"
 CAMAYOC = "camayoc-valid.ttl"
+ONTOLOGY = "ontology-valid.ttl"
 _WORK_ITEM_CASES = (
     (
         "missing-sourceKind",
@@ -217,6 +219,87 @@ CAMAYOC_CASES = (
 )
 
 
+ONTOLOGY_CASES = (
+    (
+        ONTOLOGY,
+        "untraced-directive",
+        (OG["directive-1"], Q.trackedBy, OG["task-1"]),
+        None,
+        None,
+    ),
+    (
+        ONTOLOGY,
+        "credential-unknown-status",
+        (OG["token-1"], Q.status, Literal("active")),
+        (OG["token-1"], Q.status, Literal("expired")),
+        Q.status,
+    ),
+    (
+        ONTOLOGY,
+        "credential-free-text-expiry",
+        (OG["token-1"], Q.expiresAt, Literal("2027-01-01T00:00:00Z")),
+        (OG["token-1"], Q.expiresAt, Literal("next year")),
+        Q.expiresAt,
+    ),
+    (
+        ONTOLOGY,
+        "credential-held-on-non-host",
+        (OG["token-1"], Q.heldOn, OG["host-1"]),
+        (OG["token-1"], Q.heldOn, OG["policy-1"]),
+        Q.heldOn,
+    ),
+    (
+        ONTOLOGY,
+        "verification-unknown-result",
+        (OG["check-1"], Q.result, Literal("works")),
+        (OG["check-1"], Q.result, Literal("maybe")),
+        Q.result,
+    ),
+    (
+        ONTOLOGY,
+        "verification-free-text-time",
+        (OG["check-1"], Q.verifiedAt, Literal("2026-10-07T00:00:00Z")),
+        (OG["check-1"], Q.verifiedAt, Literal("yesterday")),
+        Q.verifiedAt,
+    ),
+    (
+        ONTOLOGY,
+        "collection-negative-count",
+        (OG["games"], Q.fileCount, Literal(12)),
+        (OG["games"], Q.fileCount, Literal(-1)),
+        Q.fileCount,
+    ),
+    (
+        ONTOLOGY,
+        "collection-uppercase-extension",
+        (OG["cartridges"], Q.hasExtension, Literal(".z64")),
+        (OG["cartridges"], Q.hasExtension, Literal(".Z64")),
+        Q.hasExtension,
+    ),
+    (
+        ONTOLOGY,
+        "collection-parent-not-collection",
+        (OG["cartridges"], Q.parentCollection, OG["games"]),
+        (OG["cartridges"], Q.parentCollection, OG["share-1"]),
+        Q.parentCollection,
+    ),
+    (
+        ONTOLOGY,
+        "collection-date-only-mtime",
+        (OG["cartridges"], Q.newestMtime, Literal("2026-09-27T12:00:00Z")),
+        (OG["cartridges"], Q.newestMtime, Literal("2026-09-27")),
+        Q.newestMtime,
+    ),
+    (
+        ONTOLOGY,
+        "collection-without-label",
+        (OG["games"], RDFS.label, Literal("games")),
+        None,
+        RDFS.label,
+    ),
+)
+
+
 def load_catalog(root: Path) -> tuple[set, set]:
     graph = Graph().parse(root / "ns.ttl")
     classes = {s for s in graph.subjects(RDF.type, RDFS.Class)}
@@ -265,7 +348,7 @@ def check_examples(shapes: Graph, examples: Path) -> int:
         if not conforms:
             raise ValueError(f"{path.name} does not conform: {sorted(paths)}")
         valid[path.name] = graph
-    cases = CASES + CAMAYOC_CASES
+    cases = CASES + CAMAYOC_CASES + ONTOLOGY_CASES
     for example, name, remove, add, path in cases:
         base = valid[example]
         if remove not in base:
