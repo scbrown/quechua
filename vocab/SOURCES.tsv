@@ -1,0 +1,14 @@
+# Pinned sources for vocab/*.terms. Regenerate with scripts/pin_vocab.py --update.
+name	prefix	namespace	url	accept	format	sha256
+schemaorg-30.1	schema	https://schema.org/	https://schema.org/version/30.1/schemaorg-current-https.ttl	text/turtle	turtle	7f15ca89398c4f235f478a4b3b8d1f975d63c5a860b77c8a8fce01f791b7ae2f
+prov-o	prov	http://www.w3.org/ns/prov#	https://www.w3.org/ns/prov-o	text/turtle	turtle	7d203989f67b38bca572253942acc5a1bf24ce3ccfece16f072dcb4be2b79a96
+odrl22	odrl	http://www.w3.org/ns/odrl/2/	https://www.w3.org/ns/odrl/2/ODRL22.ttl	text/turtle	turtle	7895765e80d86d1d0349d945a28b8a2479f03169572345080a5b3e561ef31457
+sosa	sosa	http://www.w3.org/ns/sosa/	https://www.w3.org/ns/sosa/	text/turtle	turtle	c70b0d1c843c0047e4c98e0a89392e46a05752ff6365bda7f7f55303905a0392
+dcat3	dcat	http://www.w3.org/ns/dcat#	https://www.w3.org/ns/dcat3.ttl	text/turtle	turtle	d1624d3bbf364f6fc1d43b9a188bbb9e67639b1a7d46a5cb7ea3f5d47d02b62f
+skos	skos	http://www.w3.org/2004/02/skos/core#	https://www.w3.org/2009/08/skos-reference/skos.rdf	application/rdf+xml	xml	e79633b8d0564816cee8a99f5c9acf9a0e6fc7257c7209acd684ecad53a89dd6
+org	org	http://www.w3.org/ns/org#	https://www.w3.org/ns/org.ttl	text/turtle	turtle	3e01f89a17475a88f8b1606ca0fae04800d34dbbf93adc6db12dc30929848729
+time	time	http://www.w3.org/2006/time#	https://www.w3.org/2006/time	text/turtle	turtle	251bd6970b0d7a5efa97ff681afe81a297df85deab3d860fa4f8eeba72d8f16c
+dcterms	dcterms	http://purl.org/dc/terms/	https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl	text/turtle	turtle	13df401072dd7015bf9d75162f3e41c8138075304b7b9cc1aa1e9c16db976797
+as2	as	https://www.w3.org/ns/activitystreams#	https://www.w3.org/ns/activitystreams-owl	text/turtle	turtle	e28fd3be62791b42422f2e97c0ab56141238e774be7aa860e5f03da1b2fe158f
+credentials	cred	https://www.w3.org/2018/credentials#	https://www.w3.org/2018/credentials	text/turtle	turtle	35a7c0572c001b791d2c4939139737fa0e2c54c8179974a71054151dfae64225
+ical	ical	http://www.w3.org/2002/12/cal/ical#	https://www.w3.org/2002/12/cal/ical.rdf	application/rdf+xml	xml	5b1215842ad95eb3641d0aa5635595ba4e620841b89d043d9aa10840f484ba4e

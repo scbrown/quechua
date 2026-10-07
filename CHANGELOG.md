@@ -12,6 +12,48 @@ here, and each release publishes that section as its notes.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-07
+
+Quechua becomes a thin profile over public vocabularies. It keeps only the
+terms that no public vocabulary covers, and every other term points at the one
+to use. No term is removed, so every published IRI still resolves.
+
+### Added
+
+- `alignments.ttl`: the nearest public parent or match for each kept term
+  (`rdfs:subClassOf`, `rdfs:subPropertyOf`, `skos:closeMatch`). It is a separate
+  file because subclass axioms are inferential, so loading them is opt-in. It is
+  also published as a release asset.
+- `trim/classes.tsv` and `trim/properties.tsv`: one decision per term (KEEP,
+  DROP or INFRA), with the target and a reason.
+- `vocab/`: pinned term lists for schema.org 30.1, PROV-O, ODRL 2.2, SOSA,
+  DCAT 3, SKOS, ORG, OWL-Time, DCMI Terms, Activity Streams, the VC data model
+  and RDF Calendar, with each source's URL and sha256. `scripts/pin_vocab.py`
+  regenerates and checks them.
+- `scripts/trim.py`: applies the tables and validates them, with 14 failure
+  controls. CI and the release lane run it.
+
+### Deprecated
+
+- 83 terms that a public term covers (45 classes, 38 properties). Each one is
+  marked `owl:deprecated true` and names its replacement with
+  `dcterms:isReplacedBy`. Examples: `WorkItem` is replaced by `schema:Action`,
+  `Observation` by `sosa:Observation`, `Policy` by `odrl:Policy`, `Person` by
+  `schema:Person`, and `name` by `schema:name`.
+- 180 homelab- or tool-specific terms (53 classes, 127 properties), such as
+  hosts, containers, services, routes, crew traits and file inventories. They
+  are deprecated with a comment and have no public replacement.
+
+### Kept
+
+- 183 terms (38 classes, 145 properties): governance and trust, decisions and
+  precedents, blockers and their resolution, golden paths and trajectories,
+  failure knowledge, workflow runs and transitions, and requirements with
+  their tolerances and metrics.
+
+The shapes still target the deprecated classes in this release. They are
+retargeted at the replacement classes in the next one.
+
 ## [0.4.0] - 2026-10-06
 
 ### Added
@@ -69,7 +111,8 @@ here, and each release publishes that section as its notes.
 - Tagged releases: `quechua-ns-vX.Y.Z.ttl` and `SHA256SUMS.txt`, so consumers
   pin a digest instead of the moving Pages copy.
 
-[Unreleased]: https://github.com/scbrown/quechua/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/scbrown/quechua/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/scbrown/quechua/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/scbrown/quechua/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/scbrown/quechua/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/scbrown/quechua/compare/v0.1.0...v0.2.0

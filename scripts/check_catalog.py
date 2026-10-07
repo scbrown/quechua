@@ -14,6 +14,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from rdflib import OWL, RDF, RDFS, Graph, Literal, URIRef
+from rdflib.namespace import DCTERMS
 from rdflib.plugins.parsers.notation3 import BadSyntax
 
 NAMESPACE = "https://scbrown.github.io/quechua/ns#"
@@ -22,6 +23,8 @@ NAMESPACE = "https://scbrown.github.io/quechua/ns#"
 ONTOLOGY = URIRef("https://scbrown.github.io/quechua/ns")
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 FILES = ("ns.ttl", "ns.html", "index.html", ".nojekyll", "CHANGELOG.md")
+# The only annotations a declaration may carry beyond its type and label.
+DEPRECATION = {OWL.deprecated, DCTERMS.isReplacedBy, RDFS.comment}
 
 
 def catalog_version(graph: Graph) -> str:
@@ -89,8 +92,19 @@ def validate_catalog(root: Path) -> tuple[int, int, str]:
             raise ValueError(f"expected a class/property declaration for {subject}")
         if set(graph.objects(subject, RDFS.label)) != {Literal(local)}:
             raise ValueError(f"expected exactly one local-name label for {subject}")
-        if not set(graph.predicates(subject)) <= {RDF.type, RDFS.label}:
+        predicates = set(graph.predicates(subject))
+        if not predicates <= {RDF.type, RDFS.label} | DEPRECATION:
             raise ValueError(f"unexpected predicate in declaration catalog: {subject}")
+        # A deprecated term keeps its declaration and says so exactly once; a
+        # replacement or note appears only on a deprecated term (scripts/trim.py).
+        if predicates & DEPRECATION:
+            if list(graph.objects(subject, OWL.deprecated)) != [Literal(True)]:
+                raise ValueError(f"expected exactly one owl:deprecated true on {subject}")
+            notes = len(list(graph.objects(subject, DCTERMS.isReplacedBy))) + len(
+                list(graph.objects(subject, RDFS.comment))
+            )
+            if notes != 1:
+                raise ValueError(f"a deprecated term names one replacement or one note: {subject}")
     html = CatalogHTML()
     html.feed((root / "ns.html").read_text())
     if len(html.ids) != len(set(html.ids)) or set(html.ids) != names:
@@ -137,6 +151,16 @@ def selftest(root: Path) -> None:
             lambda text: text.replace(NAMESPACE, "https://example.org/foreign#"),
         ),
         ("label", "ns.ttl", lambda text: text.replace('"APIEndpoint"', '"wrong"')),
+        (
+            "deprecated-not-true",
+            "ns.ttl",
+            lambda text: text.replace("owl:deprecated true", 'owl:deprecated "yes"', 1),
+        ),
+        (
+            "replacement-without-deprecation",
+            "ns.ttl",
+            lambda text: text.replace(" ; owl:deprecated true ; dcterms:isReplacedBy", " ; dcterms:isReplacedBy", 1),
+        ),
         (
             "anchors",
             "ns.html",

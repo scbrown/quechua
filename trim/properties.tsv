@@ -1,0 +1,312 @@
+# term	decision	relation	target	note
+# Defaults from shape usage (a property used only by kept classes is kept; only by homelab classes is homelab), then decided by hand. See trim/README.md.
+about	DROP	isReplacedBy	schema:about	
+access_via	INFRA			
+action	KEEP	none		no public parent
+actor	DROP	isReplacedBy	prov:wasAssociatedWith	
+adversariallyProvenBy	KEEP	none		no public parent
+afterHours	INFRA			
+alertExpr	INFRA			
+alternatives	KEEP	none		no public parent
+appliesTo	KEEP	none		no public parent
+applies_to	KEEP	none		no public parent
+assignsWorkflow	KEEP	none		no public parent
+atStep	KEEP	none		no public parent
+attestationSignature	KEEP	none		no public parent
+attests	KEEP	none		no public parent
+attestsBundle	KEEP	none		no public parent
+attributedTo	DROP	isReplacedBy	prov:wasAttributedTo	
+author	DROP	isReplacedBy	schema:author	
+authored_by	DROP	isReplacedBy	schema:author	
+authority	KEEP	none		no public parent
+authorityOver	KEEP	none		no public parent
+axis	INFRA			
+backend	INFRA			
+backoffFormula	KEEP	none		no public parent
+backs_up	INFRA			
+binary	INFRA			
+blessingLevel	KEEP	none		no public parent
+blockedOn	KEEP	none		no public parent
+blockerEvidence	KEEP	none		no public parent
+blockerKind	KEEP	none		no public parent
+boundary	INFRA			
+by	INFRA			
+byteCount	INFRA			
+calibrationBasis	KEEP	none		no public parent
+candidateSource	KEEP	none		no public parent
+canonicalGraphHash	KEEP	none		no public parent
+certificationSeal	KEEP	none		no public parent
+certifiesBundle	KEEP	none		no public parent
+chose	KEEP	none		no public parent
+chunkOrder	INFRA			
+claim	KEEP	none		no public parent
+commandSignature	INFRA			
+commandText	INFRA			
+committed_to	INFRA			
+condition	KEEP	none		no public parent
+confidence	KEEP	none		no public parent
+configPath	INFRA			
+configured_in	INFRA			
+connects_to	INFRA			
+consolidatesInto	KEEP	none		no public parent
+constraintClass	KEEP	none		no public parent
+contains	DROP	isReplacedBy	schema:hasPart	
+contentHash	KEEP	none		no public parent
+contentSha256	INFRA			
+corpusWatermark	KEEP	none		no public parent
+createdAt	DROP	isReplacedBy	schema:dateCreated	
+crewPlanStatus	INFRA			
+crewRoleName	INFRA			
+crewStatus	INFRA			
+ctId	INFRA			
+currentState	KEEP	none		no public parent
+dataPath	INFRA			
+date	DROP	isReplacedBy	dcterms:date	
+definedIn	DROP	isReplacedBy	rdfs:isDefinedBy	
+demonstratedBy	KEEP	none		no public parent
+depends_on	INFRA			
+deployed_on	INFRA			
+derived_from	DROP	isReplacedBy	prov:wasDerivedFrom	
+desiredCount	INFRA			
+desiredHarness	INFRA			
+diskDeltaBytes	INFRA			
+dispatchedBy	INFRA			
+domain	INFRA			
+effect	KEEP	none		no public parent
+elastic	INFRA			
+email	DROP	isReplacedBy	schema:email	
+embeddingModel	INFRA			
+enabled	KEEP	none		no public parent
+enforcedInsteadAt	KEEP	none		no public parent
+enforcementTier	KEEP	none		no public parent
+event	INFRA			
+eventId	KEEP	none		no public parent
+eventTypes	KEEP	none		no public parent
+evidenceHash	KEEP	none		no public parent
+evidenceSource	KEEP	none		no public parent
+executable	INFRA			
+executesArtifact	KEEP	none		no public parent
+exemplar	KEEP	none		no public parent
+expiresAt	DROP	isReplacedBy	schema:expires	
+extensionCounts	INFRA			
+externalUrl	DROP	isReplacedBy	schema:url	
+falseNegativeTolerance	KEEP	none		no public parent
+falsePositiveTolerance	KEEP	none		no public parent
+falsifier	KEEP	none		no public parent
+fileCount	INFRA			
+filePath	INFRA			
+filesystemIdentity	INFRA			
+firedBy	KEEP	none		no public parent
+focus	KEEP	none		no public parent
+forPolicy	KEEP	none		no public parent
+forTarget	KEEP	none		no public parent
+formulaName	INFRA			
+freshness	KEEP	none		no public parent
+fromState	KEEP	none		no public parent
+frozenWindow	KEEP	none		no public parent
+gate	KEEP	none		no public parent
+gatedBy	KEEP	none		no public parent
+gatesPath	INFRA			
+gateway	INFRA			
+governedAt	KEEP	none		no public parent
+governedBy	KEEP	none		no public parent
+grantsAction	KEEP	none		no public parent
+groundingQuery	KEEP	none		no public parent
+groupName	INFRA			
+guardsProducer	INFRA			
+hasCrewSlot	INFRA			
+hasExtension	INFRA			
+hasRole	DROP	isReplacedBy	org:role	
+hasStep	DROP	isReplacedBy	schema:step	
+hash	INFRA			
+heading	DROP	isReplacedBy	schema:headline	
+headingDepth	INFRA			
+healthEndpoint	INFRA			
+healthScore	INFRA			
+heldOn	INFRA			
+host	INFRA			
+hostedAtLayer	INFRA			
+hostname	INFRA			
+implements	INFRA			
+importsUntrustedState	KEEP	none		no public parent
+inDocument	DROP	isReplacedBy	schema:isPartOf	
+inExport	INFRA			
+inRun	KEEP	none		no public parent
+inSession	KEEP	none		no public parent
+inStep	KEEP	none		no public parent
+inWorkflowRun	KEEP	none		no public parent
+in_repo	INFRA			
+indexes	INFRA			
+inheritedByDelegates	KEEP	none		no public parent
+ipAddress	INFRA			
+issuedBy	KEEP	closeMatch	cred:issuer	
+keeper	INFRA			
+kind	INFRA			
+language	DROP	isReplacedBy	schema:inLanguage	
+latencyBudgetMs	KEEP	none		no public parent
+linkageOutcome	KEEP	none		no public parent
+localEquivalent	INFRA			
+managed_by	INFRA			
+matchType	KEEP	none		no public parent
+maxAge	KEEP	none		no public parent
+meanServiceSeconds	KEEP	none		no public parent
+meaning	KEEP	none		no public parent
+measurementWindow	KEEP	none		no public parent
+measuresRequirement	KEEP	none		no public parent
+member_of	DROP	isReplacedBy	org:memberOf	
+mentions	DROP	isReplacedBy	schema:mentions	
+minVersion	KEEP	none		no public parent
+minimumCount	KEEP	none		no public parent
+modifies	INFRA			
+monitors	INFRA			
+mountpoint	INFRA			
+mustMatch	KEEP	none		no public parent
+mustNotMatch	KEEP	none		no public parent
+name	DROP	isReplacedBy	schema:name	
+newestMtime	INFRA			
+nextChunk	INFRA			
+nodeId	INFRA			
+observedAt	DROP	isReplacedBy	sosa:resultTime	
+observedBlockedOn	KEEP	none		no public parent
+observedClosedAt	KEEP	none		no public parent
+observedStatus	KEEP	none		no public parent
+observedValue	DROP	isReplacedBy	sosa:hasSimpleResult	
+omissionAuthority	KEEP	none		no public parent
+omittedStep	KEEP	none		no public parent
+on	INFRA			
+onTimeout	KEEP	none		no public parent
+onUndecidable	KEEP	none		no public parent
+operatingPoint	KEEP	none		no public parent
+operatorCount	INFRA			
+outcome	KEEP	none		no public parent
+ownedBy	KEEP	none		no public parent
+owner	KEEP	none		no public parent
+owns	KEEP	none		no public parent
+parentCollection	INFRA			
+path	INFRA			
+performedBy	DROP	isReplacedBy	prov:wasAssociatedWith	
+platform	INFRA			
+plexId	INFRA			
+pluginType	INFRA			
+pool	INFRA			
+port	INFRA			
+prRef	KEEP	none		no public parent
+precedence	INFRA			
+precedent	KEEP	none		no public parent
+precedentRequest	KEEP	none		no public parent
+predicate	KEEP	none		no public parent
+predicateId	INFRA			
+prefix	INFRA			
+principalId	INFRA			
+probe	KEEP	none		no public parent
+produces	INFRA			
+promotedAt	KEEP	none		no public parent
+promotedBy	KEEP	none		no public parent
+promotes	KEEP	none		no public parent
+pronouns	INFRA			
+provenanceManifest	KEEP	none		no public parent
+provider	KEEP	none		no public parent
+providesCommand	INFRA			
+prunedFrom	KEEP	none		no public parent
+publicKey	KEEP	none		no public parent
+publisherAttestation	KEEP	none		no public parent
+purpose	INFRA			
+reference	DROP	isReplacedBy	dcterms:references	
+references	DROP	isReplacedBy	dcterms:references	
+refreshedBy	KEEP	none		no public parent
+regex	KEEP	none		no public parent
+registry	INFRA			
+relationship	INFRA			
+relativePath	INFRA			
+repo	INFRA			
+repoRef	KEEP	none		no public parent
+reportsToSlot	INFRA			
+reports_to	DROP	isReplacedBy	org:reportsTo	
+repositorySource	KEEP	none		no public parent
+requires	KEEP	none		no public parent
+requiresRole	KEEP	none		no public parent
+resolutionQuery	KEEP	none		no public parent
+resolvedAt	KEEP	none		no public parent
+resolvesOn	KEEP	none		no public parent
+resourceName	INFRA			
+resourceType	INFRA			
+result	KEEP	closeMatch	sosa:hasResult	
+reversibilityWindowSeconds	KEEP	none		no public parent
+reviewAfter	KEEP	none		no public parent
+rig	INFRA			
+role	INFRA			
+roleName	INFRA			
+routedTo	INFRA			
+routes_to	INFRA			
+runOf	KEEP	none		no public parent
+runs_on	INFRA			
+schedule	KEEP	none		no public parent
+scopeEntity	KEEP	none		no public parent
+scopeKind	KEEP	none		no public parent
+scopeProvenance	KEEP	none		no public parent
+script	INFRA			
+scrubCheckPass	KEEP	none		no public parent
+selector	KEEP	none		no public parent
+service	INFRA			
+severity	KEEP	none		no public parent
+sha	INFRA			
+shaclReportHash	KEEP	none		no public parent
+shapesBundleVersion	KEEP	none		no public parent
+signature	KEEP	none		no public parent
+signingKey	KEEP	none		no public parent
+similarityMethod	KEEP	none		no public parent
+similarityScore	KEEP	none		no public parent
+similarityThreshold	KEEP	none		no public parent
+skillName	INFRA			
+source	DROP	isReplacedBy	dcterms:source	
+sourceKind	KEEP	none		no public parent
+sourceRepo	INFRA			
+sourceType	INFRA			
+source_uri	DROP	isReplacedBy	dcterms:source	
+src	INFRA			
+startedAt	DROP	isReplacedBy	prov:startedAtTime	
+status	DROP	isReplacedBy	schema:creativeWorkStatus	
+stepOf	DROP	isReplacedBy	schema:isPartOf	
+storageBackend	INFRA			
+subnet	INFRA			
+symbolKind	INFRA			
+tag	DROP	isReplacedBy	schema:keywords	
+target	INFRA			
+targetRef	KEEP	none		no public parent
+targetSize	INFRA			
+targets	KEEP	none		no public parent
+threshold	KEEP	none		no public parent
+tier	INFRA			
+title	DROP	isReplacedBy	schema:name	
+to	INFRA			
+toState	KEEP	none		no public parent
+tokensConsumed	KEEP	none		no public parent
+tool	KEEP	none		no public parent
+tools	INFRA			
+touches	INFRA			
+touchesHost	INFRA			
+touchesRepo	INFRA			
+touchesService	INFRA			
+trackedBy	KEEP	none		no public parent
+traitAttachment	INFRA			
+traitAuthority	INFRA			
+traitCoordination	INFRA			
+traitLifecycle	INFRA			
+traitScope	INFRA			
+traitValue	INFRA			
+traitWorkIntake	INFRA			
+trigger	INFRA			
+triggerKind	KEEP	none		no public parent
+triggered_by	KEEP	subPropertyOf	prov:wasInformedBy	
+triggers	INFRA			
+ungovernedReason	KEEP	none		no public parent
+unit	DROP	isReplacedBy	schema:unitText	
+untrustedOrigin	KEEP	none		no public parent
+url	DROP	isReplacedBy	schema:url	
+verificationPoint	KEEP	none		no public parent
+verifiedAt	KEEP	none		no public parent
+verified_by	KEEP	none		no public parent
+verifier	KEEP	none		no public parent
+version	DROP	isReplacedBy	schema:softwareVersion	
+visitDate	INFRA			
+year	DROP	isReplacedBy	schema:datePublished	

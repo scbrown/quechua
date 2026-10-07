@@ -1,0 +1,94 @@
+# Alignments of the kept Quechua terms to public vocabularies. Generated from
+# trim/*.tsv by scripts/trim.py; do not edit by hand. rdfs:subClassOf is
+# inferential, which is why this is a separate file: loading it is opt-in.
+@prefix cred: <https://www.w3.org/2018/credentials#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+
+quechua:Blocker rdfs:subClassOf prov:Entity .
+
+quechua:CertifiedShareBundle skos:closeMatch dcat:Dataset .
+
+quechua:Decision rdfs:subClassOf prov:Entity .
+
+quechua:DecisionRequest rdfs:subClassOf prov:Entity .
+
+quechua:Directive rdfs:subClassOf quechua:OperationalKnowledge .
+
+quechua:ExecutionPath rdfs:subClassOf prov:Plan .
+
+quechua:FailureMode rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:FailurePattern rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:GoldenPath rdfs:subClassOf prov:Plan .
+
+quechua:Incident rdfs:subClassOf prov:Activity .
+
+quechua:IncidentClass rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:InternalIdentifierPattern rdfs:subClassOf quechua:TextRule .
+
+quechua:KnowledgeCertificationSeal skos:closeMatch cred:VerifiableCredential .
+
+quechua:Metric skos:closeMatch sosa:ObservableProperty .
+
+quechua:NonFunctionalRequirement rdfs:subClassOf quechua:Requirement .
+
+quechua:OperatingPoint rdfs:subClassOf prov:Entity .
+
+quechua:OperationalFact rdfs:subClassOf quechua:OperationalKnowledge .
+
+quechua:Overseer rdfs:subClassOf prov:Agent .
+
+quechua:PathOmission rdfs:subClassOf prov:Entity .
+
+quechua:PathPromotion rdfs:subClassOf prov:Activity .
+
+quechua:PrecedentLink rdfs:subClassOf prov:Entity .
+
+quechua:PublisherAttestation skos:closeMatch cred:VerifiableCredential .
+
+quechua:Reaction rdfs:subClassOf prov:Plan .
+
+quechua:ReactionFiring rdfs:subClassOf prov:Activity .
+
+quechua:Selector rdfs:subClassOf prov:Entity .
+
+quechua:Trajectory rdfs:subClassOf prov:Entity .
+
+quechua:Transition rdfs:subClassOf prov:Entity .
+
+quechua:TransitionEvent rdfs:subClassOf prov:Activity .
+
+quechua:Verdict rdfs:subClassOf prov:Entity .
+
+quechua:Verification rdfs:subClassOf prov:Activity .
+
+quechua:VerifierRegistration rdfs:subClassOf prov:Entity .
+
+quechua:WorkflowDefinition rdfs:subClassOf prov:Plan .
+
+quechua:WorkflowRun rdfs:subClassOf prov:Activity .
+
+quechua:issuedBy skos:closeMatch cred:issuer .
+
+quechua:result skos:closeMatch sosa:hasResult .
+
+quechua:triggered_by rdfs:subPropertyOf prov:wasInformedBy .
+
+quechua:OperationalRule skos:closeMatch odrl:Rule .
+
+quechua:Requirement rdfs:subClassOf prov:Entity .
+
+quechua:TextRule rdfs:subClassOf quechua:OperationalRule .
+
+quechua:FailureKnowledge rdfs:subClassOf quechua:OperationalKnowledge .
+
+quechua:OperationalKnowledge rdfs:subClassOf prov:Entity .
+

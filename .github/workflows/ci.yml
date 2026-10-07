@@ -26,3 +26,5 @@ jobs:
         run: uv run --locked --script scripts/check_catalog.py --selftest
       - name: Validate shapes, examples and failure controls
         run: uv run --locked --script scripts/check_shapes.py --selftest
+      - name: Validate the trim (decisions, pinned targets, alignments) and its failure controls
+        run: uv run --locked --script scripts/trim.py --selftest
