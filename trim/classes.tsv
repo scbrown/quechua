@@ -1,0 +1,140 @@
+# term	decision	relation	target	note
+# KEEP: differentiated governance/trust/golden-path/failure-knowledge terms. relation = how it aligns.
+# DROP: owl:deprecated + dcterms:isReplacedBy target (W3C Rec > schema.org > other public vocabulary).
+# INFRA: homelab or tool-specific; deprecated in the public catalog, stays in the private ontology.
+Blocker	KEEP	subClassOf	prov:Entity	resolution kinds and evidence rules are the differentiator
+Decision	KEEP	subClassOf	prov:Entity	decisions with evidence and reversibility rules
+DecisionRequest	KEEP	subClassOf	prov:Entity	a decision asked for, before it is made
+PrecedentLink	KEEP	subClassOf	prov:Entity	decision precedent with match rules
+ExecutionPath	KEEP	subClassOf	prov:Plan	the path a mechanism actually executes from
+GoldenPath	KEEP	subClassOf	prov:Plan	promoted, verified way of doing a task
+PathPromotion	KEEP	subClassOf	prov:Activity	promotion of a trajectory to a golden path
+PathOmission	KEEP	subClassOf	prov:Entity	a step a path deliberately omits, with authority
+Trajectory	KEEP	subClassOf	prov:Entity	recorded sequence of steps toward a goal
+OperationalKnowledge	KEEP	subClassOf	prov:Entity	parent of directives and failure knowledge
+OperationalFact	KEEP	subClassOf	OperationalKnowledge	fact with source-kind posture
+Directive	KEEP	subClassOf	OperationalKnowledge	referent instruction, verbatim, governed
+OperationalRule	KEEP	closeMatch	odrl:Rule	machine-checked operational rule
+TextRule	KEEP	subClassOf	OperationalRule	pattern rule over text
+InternalIdentifierPattern	KEEP	subClassOf	TextRule	scrub pattern that must not reach public repos
+FailureKnowledge	KEEP	subClassOf	OperationalKnowledge	failure knowledge layer
+FailureMode	KEEP	subClassOf	FailureKnowledge	how a thing goes wrong
+FailurePattern	KEEP	subClassOf	FailureKnowledge	recurring shape across failures
+IncidentClass	KEEP	subClassOf	FailureKnowledge	class of incident
+Incident	KEEP	subClassOf	prov:Activity	an occurrence, linked to failure knowledge
+Reaction	KEEP	subClassOf	prov:Plan	declared trigger -> action rule
+ReactionFiring	KEEP	subClassOf	prov:Activity	one firing of a reaction
+Selector	KEEP	subClassOf	prov:Entity	scope selector for rules and reactions
+Overseer	KEEP	subClassOf	prov:Agent	agent with authority to gate work
+Verdict	KEEP	subClassOf	prov:Entity	gate outcome with evidence
+Verification	KEEP	subClassOf	prov:Activity	running a falsifiable check
+VerifierRegistration	KEEP	subClassOf	prov:Entity	registered verifier and its scope
+KnowledgeCertificationSeal	KEEP	closeMatch	cred:VerifiableCredential	signed certification of a knowledge bundle
+PublisherAttestation	KEEP	closeMatch	cred:VerifiableCredential	publisher's signed attestation
+CertifiedShareBundle	KEEP	closeMatch	dcat:Dataset	shared graph bundle with certification
+WorkflowDefinition	KEEP	subClassOf	prov:Plan	declared workflow with verifiable transitions
+WorkflowRun	KEEP	subClassOf	prov:Activity	one run of a workflow definition
+Transition	KEEP	subClassOf	prov:Entity	declared state transition
+TransitionEvent	KEEP	subClassOf	prov:Activity	observed transition, checked against declaration
+Requirement	KEEP	subClassOf	prov:Entity	requirement with a falsifier
+NonFunctionalRequirement	KEEP	subClassOf	Requirement	tolerances and measurement window
+Metric	KEEP	closeMatch	sosa:ObservableProperty	metric with derivation and retrieval method
+OperatingPoint	KEEP	subClassOf	prov:Entity	operating point a requirement is measured at
+WorkItem	DROP	isReplacedBy	schema:Action	the seeds tracker mapping
+PlanStep	DROP	isReplacedBy	schema:HowToStep	
+Step	DROP	isReplacedBy	schema:Action	an executed step of a trajectory
+Workflow	DROP	isReplacedBy	prov:Plan	generic; WorkflowDefinition carries the semantics
+WorkflowStep	DROP	isReplacedBy	schema:HowToStep	
+Policy	DROP	isReplacedBy	odrl:Policy	W3C Rec
+Procedure	DROP	isReplacedBy	schema:HowTo	
+Observation	DROP	isReplacedBy	sosa:Observation	W3C Rec
+UsageRecord	DROP	isReplacedBy	sosa:Observation	token usage is an observation
+Session	DROP	isReplacedBy	prov:Activity	
+Principal	DROP	isReplacedBy	prov:Agent	
+Person	DROP	isReplacedBy	schema:Person	
+FamilyMember	DROP	isReplacedBy	schema:Person	relation carried by a property
+OperatorGroup	DROP	isReplacedBy	org:Organization	
+ResponsibilityDomain	DROP	isReplacedBy	org:Role	
+Workstream	DROP	isReplacedBy	schema:Project	
+Concept	DROP	isReplacedBy	skos:Concept	W3C Rec
+Predicate	DROP	isReplacedBy	rdf:Property	
+Document	DROP	isReplacedBy	schema:DigitalDocument	
+DesignDoc	DROP	isReplacedBy	schema:DigitalDocument	
+DecisionRecord	DROP	isReplacedBy	schema:DigitalDocument	
+Section	DROP	isReplacedBy	schema:CreativeWork	part of a document via schema:hasPart
+Chunk	DROP	isReplacedBy	schema:CreativeWork	part of a document via schema:hasPart
+Artifact	DROP	isReplacedBy	prov:Entity	
+DataCorpus	DROP	isReplacedBy	dcat:Dataset	W3C Rec
+MLModel	DROP	isReplacedBy	schema:CreativeWork	
+Movie	DROP	isReplacedBy	schema:Movie	
+TVSeries	DROP	isReplacedBy	schema:TVSeries	
+GitRepo	DROP	isReplacedBy	schema:SoftwareSourceCode	
+GitRepository	DROP	isReplacedBy	schema:SoftwareSourceCode	
+Repo	DROP	isReplacedBy	schema:SoftwareSourceCode	
+CodeModule	DROP	isReplacedBy	schema:SoftwareSourceCode	
+CodeSymbol	DROP	isReplacedBy	schema:SoftwareSourceCode	part of source code
+Script	DROP	isReplacedBy	schema:SoftwareSourceCode	
+Commit	KEEP	subClassOf	prov:Entity	VCS revision; no public revision class, and code-graph readers query it (wu)
+GitCommit	KEEP	subClassOf	Commit	a git revision; consistent with Commit (dearing)
+SoftwareVersion	DROP	isReplacedBy	schema:SoftwareApplication	version via schema:softwareVersion
+WebApplication	DROP	isReplacedBy	schema:WebApplication	
+APIEndpoint	DROP	isReplacedBy	schema:EntryPoint	
+Tool	DROP	isReplacedBy	schema:SoftwareApplication	
+CLI	DROP	isReplacedBy	schema:SoftwareApplication	
+CLITool	DROP	isReplacedBy	schema:SoftwareApplication	
+AgentTool	DROP	isReplacedBy	schema:SoftwareApplication	
+Plugin	DROP	isReplacedBy	schema:SoftwareApplication	
+MCPServer	DROP	isReplacedBy	schema:SoftwareApplication	
+Host	INFRA			
+BareMetalHost	INFRA			
+Container	INFRA			
+DockerContainer	INFRA			
+LXCContainer	INFRA			
+ProxmoxNode	INFRA			
+RemoteHost	INFRA			
+DockerImage	INFRA			
+NFSExport	INFRA			
+NetworkSegment	INFRA			
+StoragePool	INFRA			
+ZFSDataset	INFRA			
+SystemdService	INFRA			
+SystemdTimer	INFRA			
+CronJob	INFRA			
+TraefikRoute	INFRA			
+ReverseProxyRoute	INFRA			
+AnsibleGroup	INFRA			
+AnsibleRole	INFRA			
+TerraformResource	INFRA			
+ConfigFile	INFRA			
+ConfigSetting	INFRA			
+Credential	INFRA			
+SSHKey	INFRA			
+PushgatewayJob	INFRA			
+MonitoringProbe	INFRA			
+Probe	INFRA			
+CIWorkflow	INFRA			
+CiJob	INFRA			
+AlertRule	INFRA			
+Service	INFRA			
+DatabaseService	INFRA			
+SearchService	INFRA			
+ExternalService	INFRA			
+GoogleAccount	INFRA			
+Rig	INFRA			gas town rig
+Formula	INFRA			gas town formula
+ClaudeCodeHook	INFRA			
+LocalCommand	INFRA			
+CommandDiskImpactObservation	INFRA			
+Skill	INFRA			
+ToolClass	INFRA			
+Bundle	INFRA			bobbin context bundle
+FileCollection	INFRA			
+MediaLibrary	INFRA			
+Watchlist	INFRA			
+TraitValue	INFRA			crew traits
+SecurityFinding	INFRA			
+Capability	INFRA			no clean public class
+Limitation	INFRA			no clean public class
+Feature	INFRA			no clean public class
+Component	INFRA			no clean public class
+DesignPrinciple	INFRA			

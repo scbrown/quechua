@@ -35,12 +35,14 @@ jobs:
           uv run --locked --script scripts/check_catalog.py --selftest \
             --expect-version "$GITHUB_REF_NAME" --notes "$RUNNER_TEMP/notes.md"
           uv run --locked --script scripts/check_shapes.py --selftest
+          uv run --locked --script scripts/trim.py --selftest
 
       - name: Assets and checksums
         run: |
           set -euo pipefail
           mkdir dist
           cp ns.ttl "dist/quechua-ns-$GITHUB_REF_NAME.ttl"
+          cp alignments.ttl "dist/quechua-alignments-$GITHUB_REF_NAME.ttl"
           for f in shapes/*.shapes.ttl; do
             name=$(basename "$f" .shapes.ttl)
             cp "$f" "dist/quechua-$name-shapes-$GITHUB_REF_NAME.ttl"
