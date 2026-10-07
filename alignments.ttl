@@ -14,6 +14,8 @@ quechua:Blocker rdfs:subClassOf prov:Entity .
 
 quechua:CertifiedShareBundle skos:closeMatch dcat:Dataset .
 
+quechua:Commit rdfs:subClassOf prov:Entity .
+
 quechua:Decision rdfs:subClassOf prov:Entity .
 
 quechua:DecisionRequest rdfs:subClassOf prov:Entity .

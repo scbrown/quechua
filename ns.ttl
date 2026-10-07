@@ -28,7 +28,7 @@
 <https://scbrown.github.io/quechua/ns#CodeModule> a rdfs:Class ; rdfs:label "CodeModule" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/SoftwareSourceCode> .
 <https://scbrown.github.io/quechua/ns#CodeSymbol> a rdfs:Class ; rdfs:label "CodeSymbol" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/SoftwareSourceCode> .
 <https://scbrown.github.io/quechua/ns#CommandDiskImpactObservation> a rdfs:Class ; rdfs:label "CommandDiskImpactObservation" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
-<https://scbrown.github.io/quechua/ns#Commit> a rdfs:Class ; rdfs:label "Commit" ; owl:deprecated true ; dcterms:isReplacedBy <http://www.w3.org/ns/prov#Entity> .
+<https://scbrown.github.io/quechua/ns#Commit> a rdfs:Class ; rdfs:label "Commit" .
 <https://scbrown.github.io/quechua/ns#Component> a rdfs:Class ; rdfs:label "Component" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
 <https://scbrown.github.io/quechua/ns#Concept> a rdfs:Class ; rdfs:label "Concept" ; owl:deprecated true ; dcterms:isReplacedBy <http://www.w3.org/2004/02/skos/core#Concept> .
 <https://scbrown.github.io/quechua/ns#ConfigFile> a rdfs:Class ; rdfs:label "ConfigFile" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .

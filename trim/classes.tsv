@@ -74,7 +74,7 @@ Repo	DROP	isReplacedBy	schema:SoftwareSourceCode
 CodeModule	DROP	isReplacedBy	schema:SoftwareSourceCode	
 CodeSymbol	DROP	isReplacedBy	schema:SoftwareSourceCode	part of source code
 Script	DROP	isReplacedBy	schema:SoftwareSourceCode	
-Commit	DROP	isReplacedBy	prov:Entity	a revision
+Commit	KEEP	subClassOf	prov:Entity	VCS revision; no public revision class, and code-graph readers query it (wu)
 GitCommit	DROP	isReplacedBy	prov:Entity	a revision
 SoftwareVersion	DROP	isReplacedBy	schema:SoftwareApplication	version via schema:softwareVersion
 WebApplication	DROP	isReplacedBy	schema:WebApplication	
