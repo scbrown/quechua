@@ -35,7 +35,7 @@ to use. No term is removed, so every published IRI still resolves.
 
 ### Deprecated
 
-- 82 terms that a public term covers (44 classes, 38 properties). Each one is
+- 81 terms that a public term covers (43 classes, 38 properties). Each one is
   marked `owl:deprecated true` and names its replacement with
   `dcterms:isReplacedBy`. Examples: `WorkItem` is replaced by `schema:Action`,
   `Observation` by `sosa:Observation`, `Policy` by `odrl:Policy`, `Person` by
@@ -46,7 +46,7 @@ to use. No term is removed, so every published IRI still resolves.
 
 ### Kept
 
-- 184 terms (39 classes, 145 properties): governance and trust, decisions and
+- 185 terms (40 classes, 145 properties): governance and trust, decisions and
   precedents, version-control revisions, blockers and their resolution, golden paths and trajectories,
   failure knowledge, workflow runs and transitions, and requirements with
   their tolerances and metrics.

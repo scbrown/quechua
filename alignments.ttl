@@ -14,8 +14,6 @@ quechua:Blocker rdfs:subClassOf prov:Entity .
 
 quechua:CertifiedShareBundle skos:closeMatch dcat:Dataset .
 
-quechua:Commit rdfs:subClassOf prov:Entity .
-
 quechua:Decision rdfs:subClassOf prov:Entity .
 
 quechua:DecisionRequest rdfs:subClassOf prov:Entity .
@@ -27,6 +25,8 @@ quechua:ExecutionPath rdfs:subClassOf prov:Plan .
 quechua:FailureMode rdfs:subClassOf quechua:FailureKnowledge .
 
 quechua:FailurePattern rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:GitCommit rdfs:subClassOf quechua:Commit .
 
 quechua:GoldenPath rdfs:subClassOf prov:Plan .
 
@@ -83,6 +83,8 @@ quechua:issuedBy skos:closeMatch cred:issuer .
 quechua:result skos:closeMatch sosa:hasResult .
 
 quechua:triggered_by rdfs:subPropertyOf prov:wasInformedBy .
+
+quechua:Commit rdfs:subClassOf prov:Entity .
 
 quechua:OperationalRule skos:closeMatch odrl:Rule .
 

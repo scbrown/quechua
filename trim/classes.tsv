@@ -75,7 +75,7 @@ CodeModule	DROP	isReplacedBy	schema:SoftwareSourceCode
 CodeSymbol	DROP	isReplacedBy	schema:SoftwareSourceCode	part of source code
 Script	DROP	isReplacedBy	schema:SoftwareSourceCode	
 Commit	KEEP	subClassOf	prov:Entity	VCS revision; no public revision class, and code-graph readers query it (wu)
-GitCommit	DROP	isReplacedBy	prov:Entity	a revision
+GitCommit	KEEP	subClassOf	Commit	a git revision; consistent with Commit (dearing)
 SoftwareVersion	DROP	isReplacedBy	schema:SoftwareApplication	version via schema:softwareVersion
 WebApplication	DROP	isReplacedBy	schema:WebApplication	
 APIEndpoint	DROP	isReplacedBy	schema:EntryPoint	

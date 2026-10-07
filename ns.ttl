@@ -56,7 +56,7 @@
 <https://scbrown.github.io/quechua/ns#Feature> a rdfs:Class ; rdfs:label "Feature" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
 <https://scbrown.github.io/quechua/ns#FileCollection> a rdfs:Class ; rdfs:label "FileCollection" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
 <https://scbrown.github.io/quechua/ns#Formula> a rdfs:Class ; rdfs:label "Formula" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
-<https://scbrown.github.io/quechua/ns#GitCommit> a rdfs:Class ; rdfs:label "GitCommit" ; owl:deprecated true ; dcterms:isReplacedBy <http://www.w3.org/ns/prov#Entity> .
+<https://scbrown.github.io/quechua/ns#GitCommit> a rdfs:Class ; rdfs:label "GitCommit" .
 <https://scbrown.github.io/quechua/ns#GitRepo> a rdfs:Class ; rdfs:label "GitRepo" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/SoftwareSourceCode> .
 <https://scbrown.github.io/quechua/ns#GitRepository> a rdfs:Class ; rdfs:label "GitRepository" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/SoftwareSourceCode> .
 <https://scbrown.github.io/quechua/ns#GoldenPath> a rdfs:Class ; rdfs:label "GoldenPath" .
