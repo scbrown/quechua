@@ -5,7 +5,7 @@
 
 # The release this catalog is. Bumped with a CHANGELOG section; the release
 # lane refuses a tag that disagrees with it.
-<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.3.0" .
+<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.4.0" .
 
 <https://scbrown.github.io/quechua/ns#APIEndpoint> a rdfs:Class ; rdfs:label "APIEndpoint" .
 <https://scbrown.github.io/quechua/ns#AgentTool> a rdfs:Class ; rdfs:label "AgentTool" .
@@ -18,6 +18,7 @@
 <https://scbrown.github.io/quechua/ns#Bundle> a rdfs:Class ; rdfs:label "Bundle" .
 <https://scbrown.github.io/quechua/ns#CIWorkflow> a rdfs:Class ; rdfs:label "CIWorkflow" .
 <https://scbrown.github.io/quechua/ns#CLI> a rdfs:Class ; rdfs:label "CLI" .
+<https://scbrown.github.io/quechua/ns#CLITool> a rdfs:Class ; rdfs:label "CLITool" .
 <https://scbrown.github.io/quechua/ns#Capability> a rdfs:Class ; rdfs:label "Capability" .
 <https://scbrown.github.io/quechua/ns#CertifiedShareBundle> a rdfs:Class ; rdfs:label "CertifiedShareBundle" .
 <https://scbrown.github.io/quechua/ns#Chunk> a rdfs:Class ; rdfs:label "Chunk" .
@@ -31,6 +32,7 @@
 <https://scbrown.github.io/quechua/ns#Concept> a rdfs:Class ; rdfs:label "Concept" .
 <https://scbrown.github.io/quechua/ns#ConfigFile> a rdfs:Class ; rdfs:label "ConfigFile" .
 <https://scbrown.github.io/quechua/ns#ConfigSetting> a rdfs:Class ; rdfs:label "ConfigSetting" .
+<https://scbrown.github.io/quechua/ns#Container> a rdfs:Class ; rdfs:label "Container" .
 <https://scbrown.github.io/quechua/ns#Credential> a rdfs:Class ; rdfs:label "Credential" .
 <https://scbrown.github.io/quechua/ns#CronJob> a rdfs:Class ; rdfs:label "CronJob" .
 <https://scbrown.github.io/quechua/ns#DataCorpus> a rdfs:Class ; rdfs:label "DataCorpus" .
@@ -51,13 +53,16 @@
 <https://scbrown.github.io/quechua/ns#FailurePattern> a rdfs:Class ; rdfs:label "FailurePattern" .
 <https://scbrown.github.io/quechua/ns#FamilyMember> a rdfs:Class ; rdfs:label "FamilyMember" .
 <https://scbrown.github.io/quechua/ns#Feature> a rdfs:Class ; rdfs:label "Feature" .
+<https://scbrown.github.io/quechua/ns#FileCollection> a rdfs:Class ; rdfs:label "FileCollection" .
 <https://scbrown.github.io/quechua/ns#Formula> a rdfs:Class ; rdfs:label "Formula" .
 <https://scbrown.github.io/quechua/ns#GitCommit> a rdfs:Class ; rdfs:label "GitCommit" .
 <https://scbrown.github.io/quechua/ns#GitRepo> a rdfs:Class ; rdfs:label "GitRepo" .
+<https://scbrown.github.io/quechua/ns#GitRepository> a rdfs:Class ; rdfs:label "GitRepository" .
 <https://scbrown.github.io/quechua/ns#GoldenPath> a rdfs:Class ; rdfs:label "GoldenPath" .
 <https://scbrown.github.io/quechua/ns#GoogleAccount> a rdfs:Class ; rdfs:label "GoogleAccount" .
 <https://scbrown.github.io/quechua/ns#Host> a rdfs:Class ; rdfs:label "Host" .
 <https://scbrown.github.io/quechua/ns#Incident> a rdfs:Class ; rdfs:label "Incident" .
+<https://scbrown.github.io/quechua/ns#IncidentClass> a rdfs:Class ; rdfs:label "IncidentClass" .
 <https://scbrown.github.io/quechua/ns#InternalIdentifierPattern> a rdfs:Class ; rdfs:label "InternalIdentifierPattern" .
 <https://scbrown.github.io/quechua/ns#KnowledgeCertificationSeal> a rdfs:Class ; rdfs:label "KnowledgeCertificationSeal" .
 <https://scbrown.github.io/quechua/ns#LXCContainer> a rdfs:Class ; rdfs:label "LXCContainer" .
@@ -89,12 +94,14 @@
 <https://scbrown.github.io/quechua/ns#Predicate> a rdfs:Class ; rdfs:label "Predicate" .
 <https://scbrown.github.io/quechua/ns#Principal> a rdfs:Class ; rdfs:label "Principal" .
 <https://scbrown.github.io/quechua/ns#Probe> a rdfs:Class ; rdfs:label "Probe" .
+<https://scbrown.github.io/quechua/ns#Procedure> a rdfs:Class ; rdfs:label "Procedure" .
 <https://scbrown.github.io/quechua/ns#ProxmoxNode> a rdfs:Class ; rdfs:label "ProxmoxNode" .
 <https://scbrown.github.io/quechua/ns#PublisherAttestation> a rdfs:Class ; rdfs:label "PublisherAttestation" .
 <https://scbrown.github.io/quechua/ns#PushgatewayJob> a rdfs:Class ; rdfs:label "PushgatewayJob" .
 <https://scbrown.github.io/quechua/ns#Reaction> a rdfs:Class ; rdfs:label "Reaction" .
 <https://scbrown.github.io/quechua/ns#ReactionFiring> a rdfs:Class ; rdfs:label "ReactionFiring" .
 <https://scbrown.github.io/quechua/ns#RemoteHost> a rdfs:Class ; rdfs:label "RemoteHost" .
+<https://scbrown.github.io/quechua/ns#Repo> a rdfs:Class ; rdfs:label "Repo" .
 <https://scbrown.github.io/quechua/ns#Requirement> a rdfs:Class ; rdfs:label "Requirement" .
 <https://scbrown.github.io/quechua/ns#ResponsibilityDomain> a rdfs:Class ; rdfs:label "ResponsibilityDomain" .
 <https://scbrown.github.io/quechua/ns#ReverseProxyRoute> a rdfs:Class ; rdfs:label "ReverseProxyRoute" .
@@ -167,6 +174,7 @@
 <https://scbrown.github.io/quechua/ns#blockerKind> a rdf:Property ; rdfs:label "blockerKind" .
 <https://scbrown.github.io/quechua/ns#boundary> a rdf:Property ; rdfs:label "boundary" .
 <https://scbrown.github.io/quechua/ns#by> a rdf:Property ; rdfs:label "by" .
+<https://scbrown.github.io/quechua/ns#byteCount> a rdf:Property ; rdfs:label "byteCount" .
 <https://scbrown.github.io/quechua/ns#calibrationBasis> a rdf:Property ; rdfs:label "calibrationBasis" .
 <https://scbrown.github.io/quechua/ns#candidateSource> a rdf:Property ; rdfs:label "candidateSource" .
 <https://scbrown.github.io/quechua/ns#canonicalGraphHash> a rdf:Property ; rdfs:label "canonicalGraphHash" .
@@ -223,10 +231,12 @@
 <https://scbrown.github.io/quechua/ns#executesArtifact> a rdf:Property ; rdfs:label "executesArtifact" .
 <https://scbrown.github.io/quechua/ns#exemplar> a rdf:Property ; rdfs:label "exemplar" .
 <https://scbrown.github.io/quechua/ns#expiresAt> a rdf:Property ; rdfs:label "expiresAt" .
+<https://scbrown.github.io/quechua/ns#extensionCounts> a rdf:Property ; rdfs:label "extensionCounts" .
 <https://scbrown.github.io/quechua/ns#externalUrl> a rdf:Property ; rdfs:label "externalUrl" .
 <https://scbrown.github.io/quechua/ns#falseNegativeTolerance> a rdf:Property ; rdfs:label "falseNegativeTolerance" .
 <https://scbrown.github.io/quechua/ns#falsePositiveTolerance> a rdf:Property ; rdfs:label "falsePositiveTolerance" .
 <https://scbrown.github.io/quechua/ns#falsifier> a rdf:Property ; rdfs:label "falsifier" .
+<https://scbrown.github.io/quechua/ns#fileCount> a rdf:Property ; rdfs:label "fileCount" .
 <https://scbrown.github.io/quechua/ns#filePath> a rdf:Property ; rdfs:label "filePath" .
 <https://scbrown.github.io/quechua/ns#filesystemIdentity> a rdf:Property ; rdfs:label "filesystemIdentity" .
 <https://scbrown.github.io/quechua/ns#firedBy> a rdf:Property ; rdfs:label "firedBy" .
@@ -242,11 +252,13 @@
 <https://scbrown.github.io/quechua/ns#gatesPath> a rdf:Property ; rdfs:label "gatesPath" .
 <https://scbrown.github.io/quechua/ns#gateway> a rdf:Property ; rdfs:label "gateway" .
 <https://scbrown.github.io/quechua/ns#governedAt> a rdf:Property ; rdfs:label "governedAt" .
+<https://scbrown.github.io/quechua/ns#governedBy> a rdf:Property ; rdfs:label "governedBy" .
 <https://scbrown.github.io/quechua/ns#grantsAction> a rdf:Property ; rdfs:label "grantsAction" .
 <https://scbrown.github.io/quechua/ns#groundingQuery> a rdf:Property ; rdfs:label "groundingQuery" .
 <https://scbrown.github.io/quechua/ns#groupName> a rdf:Property ; rdfs:label "groupName" .
 <https://scbrown.github.io/quechua/ns#guardsProducer> a rdf:Property ; rdfs:label "guardsProducer" .
 <https://scbrown.github.io/quechua/ns#hasCrewSlot> a rdf:Property ; rdfs:label "hasCrewSlot" .
+<https://scbrown.github.io/quechua/ns#hasExtension> a rdf:Property ; rdfs:label "hasExtension" .
 <https://scbrown.github.io/quechua/ns#hasRole> a rdf:Property ; rdfs:label "hasRole" .
 <https://scbrown.github.io/quechua/ns#hasStep> a rdf:Property ; rdfs:label "hasStep" .
 <https://scbrown.github.io/quechua/ns#hash> a rdf:Property ; rdfs:label "hash" .
@@ -254,12 +266,14 @@
 <https://scbrown.github.io/quechua/ns#headingDepth> a rdf:Property ; rdfs:label "headingDepth" .
 <https://scbrown.github.io/quechua/ns#healthEndpoint> a rdf:Property ; rdfs:label "healthEndpoint" .
 <https://scbrown.github.io/quechua/ns#healthScore> a rdf:Property ; rdfs:label "healthScore" .
+<https://scbrown.github.io/quechua/ns#heldOn> a rdf:Property ; rdfs:label "heldOn" .
 <https://scbrown.github.io/quechua/ns#host> a rdf:Property ; rdfs:label "host" .
 <https://scbrown.github.io/quechua/ns#hostedAtLayer> a rdf:Property ; rdfs:label "hostedAtLayer" .
 <https://scbrown.github.io/quechua/ns#hostname> a rdf:Property ; rdfs:label "hostname" .
 <https://scbrown.github.io/quechua/ns#implements> a rdf:Property ; rdfs:label "implements" .
 <https://scbrown.github.io/quechua/ns#importsUntrustedState> a rdf:Property ; rdfs:label "importsUntrustedState" .
 <https://scbrown.github.io/quechua/ns#inDocument> a rdf:Property ; rdfs:label "inDocument" .
+<https://scbrown.github.io/quechua/ns#inExport> a rdf:Property ; rdfs:label "inExport" .
 <https://scbrown.github.io/quechua/ns#inRun> a rdf:Property ; rdfs:label "inRun" .
 <https://scbrown.github.io/quechua/ns#inSession> a rdf:Property ; rdfs:label "inSession" .
 <https://scbrown.github.io/quechua/ns#inStep> a rdf:Property ; rdfs:label "inStep" .
@@ -292,6 +306,7 @@
 <https://scbrown.github.io/quechua/ns#mustMatch> a rdf:Property ; rdfs:label "mustMatch" .
 <https://scbrown.github.io/quechua/ns#mustNotMatch> a rdf:Property ; rdfs:label "mustNotMatch" .
 <https://scbrown.github.io/quechua/ns#name> a rdf:Property ; rdfs:label "name" .
+<https://scbrown.github.io/quechua/ns#newestMtime> a rdf:Property ; rdfs:label "newestMtime" .
 <https://scbrown.github.io/quechua/ns#nextChunk> a rdf:Property ; rdfs:label "nextChunk" .
 <https://scbrown.github.io/quechua/ns#nodeId> a rdf:Property ; rdfs:label "nodeId" .
 <https://scbrown.github.io/quechua/ns#observedAt> a rdf:Property ; rdfs:label "observedAt" .
@@ -310,6 +325,7 @@
 <https://scbrown.github.io/quechua/ns#ownedBy> a rdf:Property ; rdfs:label "ownedBy" .
 <https://scbrown.github.io/quechua/ns#owner> a rdf:Property ; rdfs:label "owner" .
 <https://scbrown.github.io/quechua/ns#owns> a rdf:Property ; rdfs:label "owns" .
+<https://scbrown.github.io/quechua/ns#parentCollection> a rdf:Property ; rdfs:label "parentCollection" .
 <https://scbrown.github.io/quechua/ns#path> a rdf:Property ; rdfs:label "path" .
 <https://scbrown.github.io/quechua/ns#performedBy> a rdf:Property ; rdfs:label "performedBy" .
 <https://scbrown.github.io/quechua/ns#platform> a rdf:Property ; rdfs:label "platform" .
@@ -344,6 +360,7 @@
 <https://scbrown.github.io/quechua/ns#regex> a rdf:Property ; rdfs:label "regex" .
 <https://scbrown.github.io/quechua/ns#registry> a rdf:Property ; rdfs:label "registry" .
 <https://scbrown.github.io/quechua/ns#relationship> a rdf:Property ; rdfs:label "relationship" .
+<https://scbrown.github.io/quechua/ns#relativePath> a rdf:Property ; rdfs:label "relativePath" .
 <https://scbrown.github.io/quechua/ns#repo> a rdf:Property ; rdfs:label "repo" .
 <https://scbrown.github.io/quechua/ns#repoRef> a rdf:Property ; rdfs:label "repoRef" .
 <https://scbrown.github.io/quechua/ns#reportsToSlot> a rdf:Property ; rdfs:label "reportsToSlot" .
@@ -356,6 +373,7 @@
 <https://scbrown.github.io/quechua/ns#resolvesOn> a rdf:Property ; rdfs:label "resolvesOn" .
 <https://scbrown.github.io/quechua/ns#resourceName> a rdf:Property ; rdfs:label "resourceName" .
 <https://scbrown.github.io/quechua/ns#resourceType> a rdf:Property ; rdfs:label "resourceType" .
+<https://scbrown.github.io/quechua/ns#result> a rdf:Property ; rdfs:label "result" .
 <https://scbrown.github.io/quechua/ns#reversibilityWindowSeconds> a rdf:Property ; rdfs:label "reversibilityWindowSeconds" .
 <https://scbrown.github.io/quechua/ns#reviewAfter> a rdf:Property ; rdfs:label "reviewAfter" .
 <https://scbrown.github.io/quechua/ns#rig> a rdf:Property ; rdfs:label "rig" .
@@ -412,6 +430,7 @@
 <https://scbrown.github.io/quechua/ns#touchesHost> a rdf:Property ; rdfs:label "touchesHost" .
 <https://scbrown.github.io/quechua/ns#touchesRepo> a rdf:Property ; rdfs:label "touchesRepo" .
 <https://scbrown.github.io/quechua/ns#touchesService> a rdf:Property ; rdfs:label "touchesService" .
+<https://scbrown.github.io/quechua/ns#trackedBy> a rdf:Property ; rdfs:label "trackedBy" .
 <https://scbrown.github.io/quechua/ns#traitAttachment> a rdf:Property ; rdfs:label "traitAttachment" .
 <https://scbrown.github.io/quechua/ns#traitAuthority> a rdf:Property ; rdfs:label "traitAuthority" .
 <https://scbrown.github.io/quechua/ns#traitCoordination> a rdf:Property ; rdfs:label "traitCoordination" .
@@ -428,6 +447,7 @@
 <https://scbrown.github.io/quechua/ns#untrustedOrigin> a rdf:Property ; rdfs:label "untrustedOrigin" .
 <https://scbrown.github.io/quechua/ns#url> a rdf:Property ; rdfs:label "url" .
 <https://scbrown.github.io/quechua/ns#verificationPoint> a rdf:Property ; rdfs:label "verificationPoint" .
+<https://scbrown.github.io/quechua/ns#verifiedAt> a rdf:Property ; rdfs:label "verifiedAt" .
 <https://scbrown.github.io/quechua/ns#verified_by> a rdf:Property ; rdfs:label "verified_by" .
 <https://scbrown.github.io/quechua/ns#verifier> a rdf:Property ; rdfs:label "verifier" .
 <https://scbrown.github.io/quechua/ns#version> a rdf:Property ; rdfs:label "version" .

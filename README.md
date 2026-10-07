@@ -8,8 +8,9 @@ A shared vocabulary for knowledge, governance, and code intelligence.
 - [Turtle vocabulary](https://scbrown.github.io/quechua/ns.ttl)
 - [Work-item SHACL shapes](https://scbrown.github.io/quechua/shapes/work-item.shapes.ttl)
 - [Camayoc SHACL shapes](https://scbrown.github.io/quechua/shapes/camayoc.shapes.ttl)
+- [Ontology SHACL shapes](https://scbrown.github.io/quechua/shapes/ontology.shapes.ttl)
 
-The catalog declares 129 classes and 297 properties extracted from
+The catalog declares 136 classes and 310 properties extracted from
 the loaded shape sets. It is an initial publication, not a complete validation
 schema. Publishing these declarations does not migrate a store, enable
 inference, or change instance identifiers.
@@ -24,8 +25,11 @@ integrations need compatibility checks before changing the terms they use.
 it grants, the `Blocker`s it waits on, and the `Observation`s a tracker
 projection records. `camayoc.shapes.ttl` covers the records a reader trusts:
 decisions, verifications, execution paths, requirements and metrics, golden
-paths and cost accounting. `shapes/examples/` has a conforming example for
-each file.
+paths and cost accounting. `ontology.shapes.ttl` covers the general graph:
+infrastructure, code and repositories, documents and media collections,
+failure knowledge, and directives with the policies that govern them. Shapes
+that depend on crew and personal terms not yet in the catalog are omitted.
+`shapes/examples/` has a conforming example for each file.
 
 The shapes keep their deliberate posture: strict on the `sourceKind`
 provenance tag, permissive elsewhere. Scope is optional, because unknown scope

@@ -1,0 +1,1032 @@
+# Quechua ontology shapes
+#
+# SHACL shapes for the general knowledge graph: infrastructure (hosts,
+# containers, services, configuration), code and repositories, documents and
+# media collections, failure knowledge, directives and the policies that
+# govern them, plus the class hierarchy those shapes rely on.
+#
+# Most shapes are permissive: they bound cardinality and object types rather
+# than require fields. A few carry quipu:onViolation "emit", a Quipu engine
+# setting that reports a violation as an event instead of refusing the write.
+#
+# Generated from the shapes a live store enforces, with only the namespace
+# renamed. Shapes that use crew and personal terms not yet in the public
+# catalog are omitted. The work-item and observation shapes are published in
+# work-item.shapes.ttl. Terms are declared in
+# https://scbrown.github.io/quechua/ns.ttl; shape IRIs share the namespace but
+# are not vocabulary terms.
+
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix quipu: <http://quipu.dev/ontology/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+quechua:APIEndpointShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:APIEndpoint .
+
+quechua:AgentToolShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:sourceRepo ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:version ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:providesCommand ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:AgentTool .
+
+quechua:AlertRuleShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:alertExpr ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:severity ],
+        [ sh:maxCount 1 ;
+            sh:path quechua:keeper ],
+        [ sh:nodeKind sh:IRI ;
+            sh:path quechua:guardsProducer ] ;
+    sh:targetClass quechua:AlertRule .
+
+quechua:AnsibleGroupShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:groupName ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:src ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:AnsibleGroup .
+
+quechua:AnsibleRoleShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:roleName ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:target ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:AnsibleRole .
+
+quechua:AppliesToShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:applies_to ] ;
+    sh:targetSubjectsOf quechua:applies_to .
+
+quechua:BacksUpShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:backs_up ] ;
+    sh:targetSubjectsOf quechua:backs_up .
+
+quechua:BareMetalHostShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:hostname ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:ipAddress ] ;
+    sh:targetClass quechua:BareMetalHost .
+
+quechua:CIWorkflowShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:CIWorkflow .
+
+quechua:CLIShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:binary ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:version ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:CLI .
+
+quechua:CLITool rdfs:subClassOf quechua:CLI .
+
+quechua:CapabilityShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Capability .
+
+quechua:CiJobShape a sh:NodeShape ;
+    sh:property [ sh:class quechua:LocalCommand ;
+            sh:maxCount 1 ;
+            sh:path quechua:localEquivalent ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:gatesPath ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:CiJob .
+
+quechua:ClaudeCodeHookShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:event ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ClaudeCodeHook .
+
+quechua:CommandDiskImpactObservationShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:commandSignature ;
+            sh:pattern "^[^\\s/]+:[^\\s/]+\\|repo:[a-z0-9._-]+\\|cwd:[a-z0-9._-]+$" ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:filesystemIdentity ;
+            sh:pattern "^(root|tmpfs|mount):[a-z0-9._-]+$" ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:diskDeltaBytes ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:observedAt ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:CommandDiskImpactObservation .
+
+quechua:CommittedToShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:or ( [ sh:class quechua:GitRepo ] [ sh:class quechua:GitRepository ] [ sh:class quechua:Repo ] ) ;
+            sh:path quechua:committed_to ] ;
+    sh:targetSubjectsOf quechua:committed_to .
+
+quechua:ComponentShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Component .
+
+quechua:ConceptShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Concept .
+
+quechua:ConfigFileShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:configPath ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:contentSha256 ;
+            sh:pattern "^[0-9a-f]{64}$" ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:path ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:service ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ConfigFile .
+
+quechua:ConfigSettingShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ConfigSetting .
+
+quechua:ConfiguredInShape a sh:PropertyShape ;
+    sh:or ( [ sh:class quechua:ConfigFile ] [ sh:class quechua:AnsibleRole ] ) ;
+    sh:path quechua:configured_in .
+
+quechua:ConnectsToShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:connects_to ] ;
+    sh:targetSubjectsOf quechua:connects_to .
+
+quechua:Container rdfs:subClassOf quechua:Host .
+
+quechua:CredentialShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:in ( "active" "retired" ) ;
+            sh:maxCount 1 ;
+            sh:path quechua:status ],
+        [ sh:maxCount 1 ;
+            sh:path quechua:expiresAt ;
+            sh:pattern "^(none|unknown|[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[+-][0-9]{2}:[0-9]{2}))$" ],
+        [ sh:maxCount 1 ;
+            sh:path quechua:keeper ],
+        [ sh:maxCount 1 ;
+            sh:path quechua:probe ],
+        [ sh:class quechua:Host ;
+            sh:path quechua:heldOn ] ;
+    sh:targetClass quechua:Credential .
+
+quechua:CronJobShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:schedule ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:script ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:host ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:CronJob .
+
+quechua:DataCorpusShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DataCorpus .
+
+quechua:DatabaseServiceShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:dataPath ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:storageBackend ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DatabaseService .
+
+quechua:DecisionRecordShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:status ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:alternatives ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DecisionRecord .
+
+quechua:DependsOnShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:depends_on ] ;
+    sh:targetSubjectsOf quechua:depends_on .
+
+quechua:DeployedOnShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:deployed_on ] ;
+    sh:targetSubjectsOf quechua:deployed_on .
+
+quechua:DerivedFromShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:derived_from ] ;
+    sh:targetSubjectsOf quechua:derived_from .
+
+quechua:DesignDocShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:status ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:author ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DesignDoc .
+
+quechua:DesignPrincipleShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DesignPrinciple .
+
+quechua:DirectiveShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:authority ],
+        [ sh:maxCount 1 ;
+            sh:or ( [ sh:datatype xsd:string ] [ sh:nodeKind sh:IRI ] ) ;
+            sh:path quechua:issuedBy ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Directive .
+
+quechua:DirectiveTraceabilityShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:message "Untraced directive: it needs quechua:trackedBy a WorkItem and quechua:governedBy a Policy" ;
+    sh:or ( [ sh:class quechua:Policy ] [ sh:class quechua:AlertRule ] [ sh:property [ sh:class quechua:WorkItem ;
+                        sh:minCount 1 ;
+                        sh:path quechua:trackedBy ],
+                    [ sh:class quechua:Policy ;
+                        sh:minCount 1 ;
+                        sh:path quechua:governedBy ] ] ) ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:severity sh:Warning ;
+    sh:targetClass quechua:Directive .
+
+quechua:DockerContainerShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DockerContainer .
+
+quechua:DockerImageShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:registry ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:tag ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:DockerImage .
+
+quechua:ExternalServiceShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:externalUrl ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ExternalService .
+
+quechua:FailureModeShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:FailureMode .
+
+quechua:FailurePatternShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:FailurePattern .
+
+quechua:FamilyMemberShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:relationship ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:FamilyMember .
+
+quechua:FeatureShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Feature .
+
+quechua:FormulaShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:formulaName ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Formula .
+
+quechua:GitCommitShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:hash ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:repo ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:author ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:path quechua:date ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:GitCommit .
+
+quechua:GitRepoShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:url ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:host ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:GitRepo .
+
+quechua:GoogleAccountShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:email ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:GoogleAccount .
+
+quechua:HostShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Host .
+
+quechua:ImplementsShape a sh:PropertyShape ;
+    sh:class quechua:WorkItem ;
+    sh:path quechua:implements .
+
+quechua:IncidentClass rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:IncidentShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:severity ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Incident .
+
+quechua:InternalIdentifierPatternShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:path quechua:mustMatch ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:mustNotMatch ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:InternalIdentifierPattern .
+
+quechua:LXCContainerShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:path quechua:ctId ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:ipAddress ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:hostname ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:LXCContainer .
+
+quechua:LabelRequiredShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetSubjectsOf quechua:connects_to,
+        quechua:depends_on,
+        quechua:deployed_on,
+        quechua:managed_by,
+        quechua:member_of,
+        quechua:monitors,
+        quechua:owns,
+        quechua:routes_to,
+        quechua:runs_on .
+
+quechua:LimitationShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Limitation .
+
+quechua:LocalCommandShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:commandText ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:LocalCommand .
+
+quechua:MCPServerShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:path quechua:port ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:tools ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:MCPServer .
+
+quechua:MLModelShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:MLModel .
+
+quechua:MediaLibraryShape a sh:NodeShape ;
+    sh:node quechua:FileCollectionShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:platform ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:MediaLibrary .
+
+quechua:MemberOfShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:or ( [ sh:class quechua:Rig ] [ sh:class quechua:AnsibleGroup ] [ sh:class quechua:Skill ] ) ;
+            sh:path quechua:member_of ] ;
+    sh:targetSubjectsOf quechua:member_of .
+
+quechua:MetricShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Metric .
+
+quechua:ModifiesShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:modifies ] ;
+    sh:targetSubjectsOf quechua:modifies .
+
+quechua:MonitoringProbeShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:MonitoringProbe .
+
+quechua:MonitorsShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:monitors ] ;
+    sh:targetSubjectsOf quechua:monitors .
+
+quechua:MovieShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:title ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:path quechua:year ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:plexId ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Movie .
+
+quechua:NFSExportShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:NFSExport .
+
+quechua:NetworkSegmentShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:subnet ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:gateway ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:purpose ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:NetworkSegment .
+
+quechua:OperationalFactShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:OperationalFact .
+
+quechua:OperationalRuleShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:OperationalRule .
+
+quechua:OverseerShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:pronouns ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Overseer .
+
+quechua:OwnsShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:owns ] ;
+    sh:targetSubjectsOf quechua:owns .
+
+quechua:PersonShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Person .
+
+quechua:PluginShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:pluginType ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:triggers ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Plugin .
+
+quechua:ProbeShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:domain ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path quechua:date ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Probe .
+
+quechua:Procedure rdfs:subClassOf quechua:Directive .
+
+quechua:ProxmoxNodeShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:nodeId ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:role ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ProxmoxNode .
+
+quechua:PushgatewayJobShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:PushgatewayJob .
+
+quechua:ReactionFiringShape a sh:NodeShape ;
+    sh:property [ sh:class quechua:Reaction ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:firedBy ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:path quechua:focus ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:startedAt ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:path quechua:resolvedAt ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:eventId ] ;
+    sh:targetClass quechua:ReactionFiring .
+
+quechua:ReactionShape a sh:NodeShape ;
+    sh:property [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:string ;
+            sh:in ( "event" "schedule" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:triggerKind ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:eventTypes ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:schedule ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:condition ],
+        [ sh:datatype xsd:string ;
+            sh:in ( "info" "warning" "critical" "page" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:severity ],
+        [ sh:datatype xsd:string ;
+            sh:in ( "alert" "page" "bead" "webhook" ) ;
+            sh:minCount 1 ;
+            sh:path quechua:action ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path quechua:owner ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:path quechua:enabled ],
+        [ sh:maxCount 1 ;
+            sh:path rdfs:comment ] ;
+    sh:targetClass quechua:Reaction .
+
+quechua:RemoteHostShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:RemoteHost .
+
+quechua:RequirementShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Requirement .
+
+quechua:ResponsibilityDomainShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ResponsibilityDomain .
+
+quechua:ReverseProxyRouteShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:hostname ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:backend ;
+            sh:pattern "^https?://[^{]+$" ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ReverseProxyRoute .
+
+quechua:RigShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:prefix ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:purpose ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Rig .
+
+quechua:RoutesToShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:routes_to ] ;
+    sh:targetSubjectsOf quechua:routes_to .
+
+quechua:RunsOnShape a sh:PropertyShape ;
+    sh:or ( [ sh:class quechua:ProxmoxNode ] [ sh:class quechua:BareMetalHost ] [ sh:class quechua:LXCContainer ] ) ;
+    sh:path quechua:runs_on .
+
+quechua:SSHKeyShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:SSHKey .
+
+quechua:ScriptShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:path ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:trigger ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:schedule ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Script .
+
+quechua:SearchServiceShape a sh:NodeShape ;
+    sh:property [ sh:nodeKind sh:IRI ;
+            sh:path quechua:indexes ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:SearchService .
+
+quechua:SecurityFindingShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:SecurityFinding .
+
+quechua:ServiceShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Service .
+
+quechua:SkillShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:skillName ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Skill .
+
+quechua:SoftwareVersionShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:version ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:SoftwareVersion .
+
+quechua:StoragePoolShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:StoragePool .
+
+quechua:SystemdServiceShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:path quechua:port ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:healthEndpoint ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 100 ;
+            sh:minInclusive 0 ;
+            sh:path quechua:healthScore ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:SystemdService .
+
+quechua:SystemdTimerShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:SystemdTimer .
+
+quechua:TVSeriesShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:plexId ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:TVSeries .
+
+quechua:TerraformResourceShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:resourceType ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:resourceName ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:src ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:TerraformResource .
+
+quechua:TextRuleShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path quechua:regex ],
+        [ sh:minCount 1 ;
+            sh:path quechua:enforcementTier ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:mustMatch ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:mustNotMatch ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:TextRule .
+
+quechua:ToolShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Tool .
+
+quechua:TraefikRouteShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:TraefikRoute .
+
+quechua:TraitValueShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:in ( "attachment" "scope" "authority" "lifecycle" ) ;
+            sh:maxCount 1 ;
+            sh:path quechua:axis ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:traitValue ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:path quechua:precedence ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:TraitValue .
+
+quechua:TriggeredByShape a sh:NodeShape ;
+    quipu:onViolation "emit" ;
+    sh:property [ sh:or ( [ sh:class quechua:CronJob ] [ sh:class quechua:SystemdTimer ] [ sh:class quechua:Script ] [ sh:class quechua:GitCommit ] [ sh:class quechua:CLI ] ) ;
+            sh:path quechua:triggered_by ] ;
+    sh:targetSubjectsOf quechua:triggered_by .
+
+quechua:VerificationShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:in ( "works" "dead" "unknown" ) ;
+            sh:maxCount 1 ;
+            sh:path quechua:result ],
+        [ sh:maxCount 1 ;
+            sh:path quechua:verifiedAt ;
+            sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[+-][0-9]{2}:[0-9]{2})$" ] ;
+    sh:targetClass quechua:Verification .
+
+quechua:WatchlistShape a sh:NodeShape ;
+    sh:property [ sh:maxCount 1 ;
+            sh:path quechua:owner ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Watchlist .
+
+quechua:WebApplicationShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:externalUrl ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:WebApplication .
+
+quechua:WorkstreamShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:Workstream .
+
+quechua:ZFSDatasetShape a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:pool ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:mountpoint ],
+        [ sh:minCount 1 ;
+            sh:path rdfs:label ] ;
+    sh:targetClass quechua:ZFSDataset .
+
+quechua:AgentTool rdfs:subClassOf quechua:Tool .
+
+quechua:ClaudeCodeHook rdfs:subClassOf quechua:Script .
+
+quechua:CommandDiskImpactObservation rdfs:subClassOf quechua:Observation .
+
+quechua:DatabaseService rdfs:subClassOf quechua:Service .
+
+quechua:DecisionRecord rdfs:subClassOf quechua:Document .
+
+quechua:DesignDoc rdfs:subClassOf quechua:Document .
+
+quechua:DockerContainer rdfs:subClassOf quechua:Host .
+
+quechua:ExternalService rdfs:subClassOf quechua:Service .
+
+quechua:FailureMode rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:FailurePattern rdfs:subClassOf quechua:FailureKnowledge .
+
+quechua:FileCollectionShape a sh:NodeShape ;
+    sh:property [ sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:class quechua:NFSExport ;
+            sh:maxCount 1 ;
+            sh:path quechua:inExport ],
+        [ sh:class quechua:FileCollection ;
+            sh:maxCount 1 ;
+            sh:path quechua:parentCollection ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:relativePath ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 0 ;
+            sh:path quechua:fileCount ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minInclusive 0 ;
+            sh:path quechua:byteCount ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:newestMtime ;
+            sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" ],
+        [ sh:datatype xsd:string ;
+            sh:path quechua:hasExtension ;
+            sh:pattern "^\\.[a-z0-9_+-]{1,16}$" ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path quechua:extensionCounts ] ;
+    sh:targetClass quechua:FileCollection .
+
+quechua:InternalIdentifierPattern rdfs:subClassOf quechua:TextRule .
+
+quechua:MediaLibrary rdfs:subClassOf quechua:FileCollection .
+
+quechua:OperationalRule rdfs:subClassOf quechua:Directive .
+
+quechua:RemoteHost rdfs:subClassOf quechua:Host .
+
+quechua:SSHKey rdfs:subClassOf quechua:Credential .
+
+quechua:SearchService rdfs:subClassOf quechua:Service .
+
+quechua:SystemdService rdfs:subClassOf quechua:Service .
+
+quechua:WebApplication rdfs:subClassOf quechua:Service .
+
+quechua:AlertRule rdfs:subClassOf quechua:Directive .
+
+quechua:BareMetalHost rdfs:subClassOf quechua:Host .
+
+quechua:LXCContainer rdfs:subClassOf quechua:Host .
+
+quechua:ProxmoxNode rdfs:subClassOf quechua:Host .
+
+quechua:CLI rdfs:subClassOf quechua:Tool .
+
+quechua:FailureKnowledge rdfs:subClassOf quechua:OperationalKnowledge .
+
+quechua:Directive rdfs:subClassOf quechua:OperationalKnowledge .
+

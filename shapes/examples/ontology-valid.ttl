@@ -1,0 +1,55 @@
+# A conforming slice of a knowledge graph: a directive traced to the work item
+# that tracks it and the policy that governs it, a credential held on a host,
+# a verification with its result, and a media folder summarised inside an
+# exported share.
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:      <https://example.org/graph/> .
+
+ex:policy-1 a quechua:Policy ; rdfs:label "Publish only public names" .
+
+ex:task-1 a quechua:WorkItem ;
+    rdfs:label "Scrub the published shapes" ;
+    quechua:sourceKind "declared" .
+
+ex:directive-1 a quechua:Directive ;
+    rdfs:label "Public shapes carry no private host names" ;
+    quechua:authority "maintainer" ;
+    quechua:issuedBy "maintainer" ;
+    quechua:trackedBy ex:task-1 ;
+    quechua:governedBy ex:policy-1 .
+
+ex:host-1 a quechua:Host ; rdfs:label "build host" .
+
+ex:token-1 a quechua:Credential ;
+    rdfs:label "publishing token" ;
+    quechua:status "active" ;
+    quechua:expiresAt "2027-01-01T00:00:00Z" ;
+    quechua:heldOn ex:host-1 .
+
+ex:check-1 a quechua:Verification ;
+    rdfs:label "the published file is served" ;
+    quechua:sourceKind "observed" ;
+    quechua:falsifier "the URL does not answer 200" ;
+    quechua:result "works" ;
+    quechua:verifiedAt "2026-10-07T00:00:00Z" .
+
+ex:share-1 a quechua:NFSExport ; rdfs:label "media share" .
+
+ex:games a quechua:FileCollection ;
+    rdfs:label "games" ;
+    quechua:inExport ex:share-1 ;
+    quechua:relativePath "games" ;
+    quechua:fileCount 12 ;
+    quechua:byteCount 4096 .
+
+ex:cartridges a quechua:FileCollection ;
+    rdfs:label "cartridges" ;
+    quechua:inExport ex:share-1 ;
+    quechua:parentCollection ex:games ;
+    quechua:relativePath "games/cartridges" ;
+    quechua:fileCount 3 ;
+    quechua:byteCount 2048 ;
+    quechua:newestMtime "2026-09-27T12:00:00Z" ;
+    quechua:hasExtension ".z64" , ".sav" .
