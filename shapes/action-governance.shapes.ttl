@@ -1,0 +1,13 @@
+# Governance of public schema.org Actions. Tracker fields belong in the
+# tracker's own profile; this profile has no tracker status or CAS terms.
+@prefix schema: <https://schema.org/> .
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+quechua:ActionGovernanceShape a sh:NodeShape ;
+    sh:targetClass schema:Action ;
+    sh:property [ sh:path quechua:sourceKind ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ] ;
+    sh:property [ sh:path quechua:outcome ; sh:maxCount 1 ;
+        sh:in ("done" "abandoned" "superseded" "failed") ] ;
+    sh:property [ sh:path quechua:blockedOn ; sh:class schema:Action ] .
