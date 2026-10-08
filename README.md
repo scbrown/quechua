@@ -7,6 +7,7 @@ A shared vocabulary for knowledge, governance, and code intelligence.
 - [Human-readable catalog](https://scbrown.github.io/quechua/ns)
 - [Turtle vocabulary](https://scbrown.github.io/quechua/ns.ttl)
 - [Work-item SHACL shapes](https://scbrown.github.io/quechua/shapes/work-item.shapes.ttl)
+- [Action governance SHACL shapes](https://scbrown.github.io/quechua/shapes/action-governance.shapes.ttl)
 - [Camayoc SHACL shapes](https://scbrown.github.io/quechua/shapes/camayoc.shapes.ttl)
 - [Ontology SHACL shapes](https://scbrown.github.io/quechua/shapes/ontology.shapes.ttl)
 - [Alignments to public vocabularies](https://scbrown.github.io/quechua/alignments.ttl)
@@ -45,6 +46,13 @@ targets are checked offline against pinned term lists in `vocab/`, derived from
 the sources and sha256 digests in `vocab/SOURCES.tsv`.
 
 ## Shapes
+
+`action-governance.shapes.ttl` applies Quechua's provenance, terminal outcome,
+and blocker constraints to public `schema:Action` records. Its blocker targets
+must also be Actions. Tracker status, priority, revisions, comments, and calendar
+mechanics belong in a separate tracker profile. Loading this governance profile
+requires every Action in the validation scope to carry `sourceKind`; publication
+alone does not enable it in a store.
 
 `shapes/` holds SHACL shapes over the catalog's terms. The first set,
 `work-item.shapes.ttl`, covers tracker-agnostic work: a `WorkItem`, the scope

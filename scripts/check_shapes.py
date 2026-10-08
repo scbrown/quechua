@@ -8,6 +8,7 @@
 """Validate the published SHACL shapes against the catalog and their examples."""
 
 import argparse
+import csv
 import re
 import tempfile
 from pathlib import Path
@@ -21,9 +22,11 @@ Q = Namespace(NAMESPACE)
 EX = Namespace("https://example.org/tracker/")
 REC = Namespace("https://example.org/records/")
 OG = Namespace("https://example.org/graph/")
+ACTION = Namespace("https://example.org/actions/")
+SCHEMA = Namespace("https://schema.org/")
 # The Quipu engine's own namespace, for its derivation properties.
 QUIPU = Namespace("http://quipu.dev/ontology/")
-ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD), str(QUIPU))
+ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD), str(QUIPU), str(SCHEMA))
 # Public shapes must not carry private infrastructure names.
 FORBIDDEN = re.compile(
     r"\.(lan|svc|local|internal)\b|\b(10|192\.168|172\.(1[6-9]|2\d|3[01]))\.\d+\.\d+",
@@ -307,22 +310,28 @@ def load_catalog(root: Path) -> tuple[set, set]:
     return classes, properties
 
 
-def check_terms(path: Path, shapes: Graph, classes: set, properties: set) -> None:
+def check_terms(path: Path, shapes: Graph, classes: set, properties: set, root: Path) -> None:
     """Every IRI is in an allowed namespace and every Quechua term is declared."""
     text = path.read_text()
     if match := FORBIDDEN.search(text):
         raise ValueError(f"{path.name}: private name {match.group(0)!r}")
     shape_names = set(shapes.subjects(RDF.type, SH.NodeShape))
+    with (root / "vocab/SOURCES.tsv").open() as handle:
+        rows = csv.DictReader((line for line in handle if not line.startswith("#")), delimiter="\t")
+        source = next(row for row in rows if row["prefix"] == "schema")
+    public_terms = set((root / "vocab" / f"{source['name']}.terms").read_text().split())
     for triple in shapes:
         for term in triple:
             if isinstance(term, URIRef) and not str(term).startswith(ALLOWED):
                 raise ValueError(
                     f"{path.name}: IRI outside the allowed namespaces: {term}"
                 )
+            if isinstance(term, URIRef) and str(term).startswith(str(SCHEMA)) and str(term) not in public_terms:
+                raise ValueError(f"{path.name}: term not defined by pinned schema.org: {term}")
     for cls in set(shapes.objects(None, SH.targetClass)) | set(
         shapes.objects(None, SH["class"])
     ):
-        if cls not in classes:
+        if cls not in classes and cls != SCHEMA.Action:
             raise ValueError(f"{path.name}: class not declared in ns.ttl: {cls}")
     for prop in set(shapes.objects(None, SH.path)) | set(
         shapes.objects(None, SH.targetSubjectsOf)
@@ -348,7 +357,13 @@ def check_examples(shapes: Graph, examples: Path) -> int:
         if not conforms:
             raise ValueError(f"{path.name} does not conform: {sorted(paths)}")
         valid[path.name] = graph
-    cases = CASES + CAMAYOC_CASES + ONTOLOGY_CASES
+    action_cases = (
+        ("action-governance-valid.ttl", "action-missing-source", (ACTION.review, Q.sourceKind, Literal("observed")), None, Q.sourceKind),
+        ("action-governance-valid.ttl", "action-unknown-source", (ACTION.review, Q.sourceKind, Literal("observed")), (ACTION.review, Q.sourceKind, Literal("guessed")), Q.sourceKind),
+        ("action-governance-valid.ttl", "action-invalid-outcome", (ACTION.prepare, Q.outcome, Literal("done")), (ACTION.prepare, Q.outcome, Literal("in progress")), Q.outcome),
+        ("action-governance-valid.ttl", "action-unresolved-blocker", (ACTION.review, Q.blockedOn, ACTION.prepare), (ACTION.review, Q.blockedOn, ACTION.missing), Q.blockedOn),
+    )
+    cases = CASES + CAMAYOC_CASES + ONTOLOGY_CASES + action_cases
     for example, name, remove, add, path in cases:
         base = valid[example]
         if remove not in base:
@@ -376,7 +391,7 @@ def check(root: Path) -> None:
         raise ValueError("no shapes published")
     for path in files:
         graph = Graph().parse(path)
-        check_terms(path, graph, classes, properties)
+        check_terms(path, graph, classes, properties, root)
         shapes += graph
     count = len(set(shapes.subjects(RDF.type, SH.NodeShape)))
     print(
@@ -415,6 +430,10 @@ def selftest(root: Path) -> None:
             ),
         ),
         ("private-name", original + "\n# deployed on tracker.svc\n"),
+        (
+            "undefined-public-class",
+            original.replace("sh:targetClass quechua:WorkItem", "sh:targetClass <https://schema.org/NoSuchAction>", 1),
+        ),
     )
     for name, text in mutations:
         if text == original:
@@ -423,7 +442,7 @@ def selftest(root: Path) -> None:
             scratch = Path(tmp) / path.name
             scratch.write_text(text)
             try:
-                check_terms(scratch, Graph().parse(scratch), classes, properties)
+                check_terms(scratch, Graph().parse(scratch), classes, properties, root)
             except ValueError:
                 print(f"Rejected invalid shapes: {name}")
             else:

@@ -1,0 +1,8 @@
+@prefix schema: <https://schema.org/> .
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix ex: <https://example.org/actions/> .
+
+ex:review a schema:Action ; quechua:sourceKind "observed" ;
+    quechua:blockedOn ex:prepare .
+ex:prepare a schema:Action ; quechua:sourceKind "declared" ;
+    quechua:outcome "done" .
