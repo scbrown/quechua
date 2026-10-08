@@ -24,9 +24,10 @@ REC = Namespace("https://example.org/records/")
 OG = Namespace("https://example.org/graph/")
 ACTION = Namespace("https://example.org/actions/")
 SCHEMA = Namespace("https://schema.org/")
+SOSA = Namespace("http://www.w3.org/ns/sosa/")
 # The Quipu engine's own namespace, for its derivation properties.
 QUIPU = Namespace("http://quipu.dev/ontology/")
-ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD), str(QUIPU), str(SCHEMA))
+ALLOWED = (NAMESPACE, str(SH), str(RDF), str(RDFS), str(XSD), str(QUIPU), str(SCHEMA), str(SOSA))
 # Public shapes must not carry private infrastructure names.
 FORBIDDEN = re.compile(
     r"\.(lan|svc|local|internal)\b|\b(10|192\.168|172\.(1[6-9]|2\d|3[01]))\.\d+\.\d+",
@@ -318,20 +319,22 @@ def check_terms(path: Path, shapes: Graph, classes: set, properties: set, root: 
     shape_names = set(shapes.subjects(RDF.type, SH.NodeShape))
     with (root / "vocab/SOURCES.tsv").open() as handle:
         rows = csv.DictReader((line for line in handle if not line.startswith("#")), delimiter="\t")
-        source = next(row for row in rows if row["prefix"] == "schema")
-    public_terms = set((root / "vocab" / f"{source['name']}.terms").read_text().split())
+        sources = [row for row in rows if row["prefix"] in {"schema", "sosa"}]
+    public_terms = set()
+    for source in sources:
+        public_terms.update((root / "vocab" / f"{source['name']}.terms").read_text().split())
     for triple in shapes:
         for term in triple:
             if isinstance(term, URIRef) and not str(term).startswith(ALLOWED):
                 raise ValueError(
                     f"{path.name}: IRI outside the allowed namespaces: {term}"
                 )
-            if isinstance(term, URIRef) and str(term).startswith(str(SCHEMA)) and str(term) not in public_terms:
-                raise ValueError(f"{path.name}: term not defined by pinned schema.org: {term}")
+            if isinstance(term, URIRef) and str(term).startswith((str(SCHEMA), str(SOSA))) and str(term) not in public_terms:
+                raise ValueError(f"{path.name}: term not defined by pinned public vocabulary: {term}")
     for cls in set(shapes.objects(None, SH.targetClass)) | set(
         shapes.objects(None, SH["class"])
     ):
-        if cls not in classes and cls != SCHEMA.Action:
+        if cls not in classes and cls not in {SCHEMA.Action, SOSA.Observation}:
             raise ValueError(f"{path.name}: class not declared in ns.ttl: {cls}")
     for prop in set(shapes.objects(None, SH.path)) | set(
         shapes.objects(None, SH.targetSubjectsOf)
@@ -363,7 +366,12 @@ def check_examples(shapes: Graph, examples: Path) -> int:
         ("action-governance-valid.ttl", "action-invalid-outcome", (ACTION.prepare, Q.outcome, Literal("done")), (ACTION.prepare, Q.outcome, Literal("in progress")), Q.outcome),
         ("action-governance-valid.ttl", "action-unresolved-blocker", (ACTION.review, Q.blockedOn, ACTION.prepare), (ACTION.review, Q.blockedOn, ACTION.missing), Q.blockedOn),
     )
-    cases = CASES + CAMAYOC_CASES + ONTOLOGY_CASES + action_cases
+    specialization_cases = (
+        (CAMAYOC, "step-without-public-type", (REC["step-1"], RDF.type, SCHEMA.Action), None, RDF.type),
+        (CAMAYOC, "usage-without-public-type", (REC["usage-1"], RDF.type, SOSA.Observation), None, RDF.type),
+        ("observation-governance-valid.ttl", "public-observation-without-source", (URIRef("https://example.org/observations/temperature"), Q.sourceKind, Literal("observed")), None, Q.sourceKind),
+    )
+    cases = CASES + CAMAYOC_CASES + ONTOLOGY_CASES + action_cases + specialization_cases
     for example, name, remove, add, path in cases:
         base = valid[example]
         if remove not in base:

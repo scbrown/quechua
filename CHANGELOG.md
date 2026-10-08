@@ -12,6 +12,29 @@ here, and each release publishes that section as its notes.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-08
+
+### Added
+
+- Universal governance profiles for `schema:Action` and `sosa:Observation`,
+  separate from tracker mechanics and specialized consumption records.
+- Explicit public-type constraints and omission controls for Steps and
+  UsageRecords. Plain Actions and observations do not acquire specialized
+  trajectory or token requirements.
+
+### Changed
+
+- Retain `Step` and `UsageRecord` as governed specializations of the public
+  classes, with subclass alignments. Producers must assert both types; the
+  specialized shapes require the public type explicitly. These two terms are
+  no longer deprecated. Other compatibility targets remain unchanged.
+- The catalog keeps all 446 declarations: 187 kept, 79 public replacements,
+  and 180 homelab-specific terms. No instance identifiers move.
+
+Activating the new shapes requires records to carry the explicit public types.
+Publication does not load shapes or migrate existing stores. Subclass axioms
+alone are not a substitute for the required type assertions.
+
 ## [0.5.0] - 2026-10-07
 
 Quechua becomes a thin profile over public vocabularies. It keeps only the
@@ -111,7 +134,8 @@ retargeted at the replacement classes in the next one.
 - Tagged releases: `quechua-ns-vX.Y.Z.ttl` and `SHA256SUMS.txt`, so consumers
   pin a digest instead of the moving Pages copy.
 
-[Unreleased]: https://github.com/scbrown/quechua/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/scbrown/quechua/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/scbrown/quechua/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/scbrown/quechua/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/scbrown/quechua/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/scbrown/quechua/compare/v0.2.0...v0.3.0

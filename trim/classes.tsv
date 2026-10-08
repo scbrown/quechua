@@ -42,13 +42,13 @@ Metric	KEEP	closeMatch	sosa:ObservableProperty	metric with derivation and retrie
 OperatingPoint	KEEP	subClassOf	prov:Entity	operating point a requirement is measured at
 WorkItem	DROP	isReplacedBy	schema:Action	the seeds tracker mapping
 PlanStep	DROP	isReplacedBy	schema:HowToStep	
-Step	DROP	isReplacedBy	schema:Action	an executed step of a trajectory
+Step	KEEP	subClassOf	schema:Action	an action whose trajectory linkage is a governed specialized profile
 Workflow	DROP	isReplacedBy	prov:Plan	generic; WorkflowDefinition carries the semantics
 WorkflowStep	DROP	isReplacedBy	schema:HowToStep	
 Policy	DROP	isReplacedBy	odrl:Policy	W3C Rec
 Procedure	DROP	isReplacedBy	schema:HowTo	
 Observation	DROP	isReplacedBy	sosa:Observation	W3C Rec
-UsageRecord	DROP	isReplacedBy	sosa:Observation	token usage is an observation
+UsageRecord	KEEP	subClassOf	sosa:Observation	an observation whose parser session and consumption fields are governed
 Session	DROP	isReplacedBy	prov:Activity	
 Principal	DROP	isReplacedBy	prov:Agent	
 Person	DROP	isReplacedBy	schema:Person	

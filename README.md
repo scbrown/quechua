@@ -8,6 +8,7 @@ A shared vocabulary for knowledge, governance, and code intelligence.
 - [Turtle vocabulary](https://scbrown.github.io/quechua/ns.ttl)
 - [Work-item SHACL shapes](https://scbrown.github.io/quechua/shapes/work-item.shapes.ttl)
 - [Action governance SHACL shapes](https://scbrown.github.io/quechua/shapes/action-governance.shapes.ttl)
+- [Observation governance SHACL shapes](https://scbrown.github.io/quechua/shapes/observation-governance.shapes.ttl)
 - [Camayoc SHACL shapes](https://scbrown.github.io/quechua/shapes/camayoc.shapes.ttl)
 - [Ontology SHACL shapes](https://scbrown.github.io/quechua/shapes/ontology.shapes.ttl)
 - [Alignments to public vocabularies](https://scbrown.github.io/quechua/alignments.ttl)
@@ -53,6 +54,15 @@ must also be Actions. Tracker status, priority, revisions, comments, and calenda
 mechanics belong in a separate tracker profile. Loading this governance profile
 requires every Action in the validation scope to carry `sourceKind`; publication
 alone does not enable it in a store.
+
+`observation-governance.shapes.ttl` applies the same provenance floor to
+`sosa:Observation`. Specialized Steps and UsageRecords retain their Quechua
+types: a Step must also assert `schema:Action`, and a UsageRecord must also
+assert `sosa:Observation`. Their Camayoc shapes require those type assertions
+explicitly, so floor selection does not depend on subclass inference. A plain
+Action needs no trajectory; a plain observation needs no token count. Validate
+existing records before activating these constraints. Other compatibility
+targets retain their current behavior.
 
 `shapes/` holds SHACL shapes over the catalog's terms. The first set,
 `work-item.shapes.ttl`, covers tracker-agnostic work: a `WorkItem`, the scope
