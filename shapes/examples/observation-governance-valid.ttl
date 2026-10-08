@@ -1,0 +1,5 @@
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+
+<https://example.org/observations/temperature> a sosa:Observation ;
+    quechua:sourceKind "observed" .

@@ -1,0 +1,10 @@
+# Universal provenance floor for public SOSA observations. Consumption and
+# session constraints apply only to the specialized Quechua UsageRecord type.
+@prefix quechua: <https://scbrown.github.io/quechua/ns#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+quechua:ObservationGovernanceShape a sh:NodeShape ;
+    sh:targetClass sosa:Observation ;
+    sh:property [ sh:path quechua:sourceKind ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ("observed" "declared" "inferred") ] .

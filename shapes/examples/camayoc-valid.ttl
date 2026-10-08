@@ -63,7 +63,7 @@ ex:trajectory-1 a quechua:Trajectory ;
     rdfs:label "first publication" ;
     quechua:sourceKind "observed" .
 
-ex:step-1 a quechua:Step ;
+ex:step-1 a quechua:Step, <https://schema.org/Action> ;
     rdfs:label "prove isomorphism" ;
     quechua:sourceKind "observed" ;
     quechua:stepOf ex:trajectory-1 .
@@ -92,7 +92,7 @@ ex:session-1 a quechua:Session ;
     quechua:sourceKind "observed" ;
     quechua:actor ex:alice .
 
-ex:usage-1 a quechua:UsageRecord ;
+ex:usage-1 a quechua:UsageRecord, <http://www.w3.org/ns/sosa/Observation> ;
     rdfs:label "one request" ;
     quechua:sourceKind "observed" ;
     quechua:inSession ex:session-1 ;

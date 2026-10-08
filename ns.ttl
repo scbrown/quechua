@@ -6,7 +6,7 @@
 
 # The release this catalog is. Bumped with a CHANGELOG section; the release
 # lane refuses a tag that disagrees with it.
-<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.5.0" .
+<https://scbrown.github.io/quechua/ns> a owl:Ontology ; owl:versionInfo "0.6.0" .
 
 <https://scbrown.github.io/quechua/ns#APIEndpoint> a rdfs:Class ; rdfs:label "APIEndpoint" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/EntryPoint> .
 <https://scbrown.github.io/quechua/ns#AgentTool> a rdfs:Class ; rdfs:label "AgentTool" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/SoftwareApplication> .
@@ -117,7 +117,7 @@
 <https://scbrown.github.io/quechua/ns#Session> a rdfs:Class ; rdfs:label "Session" ; owl:deprecated true ; dcterms:isReplacedBy <http://www.w3.org/ns/prov#Activity> .
 <https://scbrown.github.io/quechua/ns#Skill> a rdfs:Class ; rdfs:label "Skill" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
 <https://scbrown.github.io/quechua/ns#SoftwareVersion> a rdfs:Class ; rdfs:label "SoftwareVersion" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/SoftwareApplication> .
-<https://scbrown.github.io/quechua/ns#Step> a rdfs:Class ; rdfs:label "Step" ; owl:deprecated true ; dcterms:isReplacedBy <https://schema.org/Action> .
+<https://scbrown.github.io/quechua/ns#Step> a rdfs:Class ; rdfs:label "Step" .
 <https://scbrown.github.io/quechua/ns#StoragePool> a rdfs:Class ; rdfs:label "StoragePool" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
 <https://scbrown.github.io/quechua/ns#SystemdService> a rdfs:Class ; rdfs:label "SystemdService" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
 <https://scbrown.github.io/quechua/ns#SystemdTimer> a rdfs:Class ; rdfs:label "SystemdTimer" ; owl:deprecated true ; rdfs:comment "Deprecated: homelab- or tool-specific, outside the public profile. No public replacement; it remains in the private ontology it came from." .
@@ -131,7 +131,7 @@
 <https://scbrown.github.io/quechua/ns#Trajectory> a rdfs:Class ; rdfs:label "Trajectory" .
 <https://scbrown.github.io/quechua/ns#Transition> a rdfs:Class ; rdfs:label "Transition" .
 <https://scbrown.github.io/quechua/ns#TransitionEvent> a rdfs:Class ; rdfs:label "TransitionEvent" .
-<https://scbrown.github.io/quechua/ns#UsageRecord> a rdfs:Class ; rdfs:label "UsageRecord" ; owl:deprecated true ; dcterms:isReplacedBy <http://www.w3.org/ns/sosa/Observation> .
+<https://scbrown.github.io/quechua/ns#UsageRecord> a rdfs:Class ; rdfs:label "UsageRecord" .
 <https://scbrown.github.io/quechua/ns#Verdict> a rdfs:Class ; rdfs:label "Verdict" .
 <https://scbrown.github.io/quechua/ns#Verification> a rdfs:Class ; rdfs:label "Verification" .
 <https://scbrown.github.io/quechua/ns#VerifierRegistration> a rdfs:Class ; rdfs:label "VerifierRegistration" .
