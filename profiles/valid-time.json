@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "interval": "closed-open",
+  "profiles": {
+    "tracker": {
+      "https://schema.org/Action": {"start": "https://schema.org/dateCreated", "end": "https://schema.org/endTime"}
+    },
+    "activity": {
+      "https://schema.org/Action": {"start": "https://schema.org/startTime", "end": "https://schema.org/endTime"},
+      "http://www.w3.org/ns/prov#Activity": {"start": "http://www.w3.org/ns/prov#startedAtTime", "end": "http://www.w3.org/ns/prov#endedAtTime"}
+    },
+    "calendar": {
+      "http://www.w3.org/2002/12/cal/ical#Vevent": {"start": "http://www.w3.org/2002/12/cal/ical#dtstart", "end": "http://www.w3.org/2002/12/cal/ical#dtend"},
+      "http://www.w3.org/2002/12/cal/ical#Vtodo": {"start": "http://www.w3.org/2002/12/cal/ical#dtstart", "end": "http://www.w3.org/2002/12/cal/ical#completed"}
+    },
+    "point": {
+      "http://www.w3.org/ns/sosa/Observation": {"start": "http://www.w3.org/ns/sosa/resultTime", "epsilon_ns": 1}
+    }
+  }
+}
