@@ -28,3 +28,5 @@ jobs:
         run: uv run --locked --script scripts/check_shapes.py --selftest
       - name: Validate the trim (decisions, pinned targets, alignments) and its failure controls
         run: uv run --locked --script scripts/trim.py --selftest
+      - name: Validate valid-time projection contracts
+        run: python3 -m unittest discover -s tests -v

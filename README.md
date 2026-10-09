@@ -80,6 +80,14 @@ provenance tag, permissive elsewhere. Scope is optional, because unknown scope
 advises and never blocks. Shape IRIs share the namespace but are not
 vocabulary terms.
 
+## Valid time
+
+[profiles/valid-time.json](profiles/valid-time.json) declares per-class source
+properties for valid-time projection. The [profile contract](profiles/README.md)
+covers tracker lifetimes, activities, calendar entries and point observations,
+with an offline reference resolver. Adoption is explicit; publishing this file
+does not change serving shapes or existing producers.
+
 ## Releases and pinning
 
 The Pages copy of `ns.ttl` follows `main` and changes without notice. To pin,
