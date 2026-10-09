@@ -2,7 +2,9 @@
 
 import copy
 import json
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -25,6 +27,52 @@ def record(kind=S + "Action", start=S + "dateCreated", value=T, end=None):
 
 
 class ValidTime(unittest.TestCase):
+    def test_cli_invalid_containers_exit_two_without_output(self):
+        cases = [
+            [],
+            None,
+            {"types": [S + "Action"], "properties": []},
+            {"types": [S + "Action"], "properties": None},
+            {"types": "Action", "properties": {}},
+            {"types": [S + "Action"], "properties": {S + "dateCreated": [{}]}},
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "record.json"
+            for value in cases:
+                path.write_text(json.dumps(value))
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        str(ROOT / "scripts/project_valid_time.py"),
+                        "--profile",
+                        "tracker",
+                        str(path),
+                    ],
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                )
+                with self.subTest(value=value):
+                    self.assertEqual(result.returncode, 2)
+                    self.assertEqual(result.stdout, "")
+                    self.assertIn("projection refused:", result.stderr)
+                    self.assertNotIn("Traceback", result.stderr)
+
+    def test_invalid_declaration_containers_refuse(self):
+        for value in (
+            [],
+            None,
+            {"version": 1, "interval": "closed-open", "profiles": []},
+            {"version": 1, "interval": "closed-open", "profiles": {"tracker": []}},
+            {
+                "version": 1,
+                "interval": "closed-open",
+                "profiles": {"tracker": {S + "Action": None}},
+            },
+        ):
+            with self.subTest(value=value), self.assertRaises((ValueError, TypeError)):
+                project(value, "tracker", record())
+
     def test_open_tracker_preserves_nanos(self):
         self.assertEqual(
             project(P, "tracker", record()), {"valid_from": T, "valid_to": None}

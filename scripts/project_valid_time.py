@@ -61,11 +61,31 @@ def project(
     declaration: dict, profile: str, record: dict, date_zone: str | None = None
 ) -> dict:
     """Record: asserted full-IRI types + full-IRI properties, each a list of strings."""
+    if not isinstance(declaration, dict) or not isinstance(record, dict):
+        raise TypeError("declaration and record must be objects")
     if declaration.get("version") != 1 or declaration.get("interval") != "closed-open":
         raise ValueError("unsupported valid-time declaration")
-    rules = declaration["profiles"][profile]
-    types = record["types"]
-    properties = record["properties"]
+    profiles = declaration.get("profiles")
+    if not isinstance(profiles, dict) or not isinstance(profiles.get(profile), dict):
+        raise TypeError("selected profile must be an object")
+    rules = profiles[profile]
+    if not all(
+        isinstance(kind, str) and isinstance(rule, dict) for kind, rule in rules.items()
+    ):
+        raise ValueError("class mappings must be objects keyed by class IRI")
+    types = record.get("types")
+    properties = record.get("properties")
+    if not isinstance(properties, dict):
+        raise TypeError("properties must be an object")
+    if not all(
+        isinstance(key, str)
+        and isinstance(values, list)
+        and all(isinstance(value, str) for value in values)
+        for key, values in properties.items()
+    ):
+        raise ValueError(
+            "properties must map predicate IRIs to lists of timestamp strings"
+        )
     if not isinstance(types, list) or not all(isinstance(t, str) for t in types):
         raise ValueError("types must be a list of asserted full IRIs")
     matches = [rules[t] for t in set(types) if t in rules]
@@ -74,6 +94,10 @@ def project(
     if any(rule != matches[0] for rule in matches[1:]):
         raise ValueError("conflicting class mappings; choose an unambiguous profile")
     rule = matches[0]
+    if not isinstance(rule.get("start"), str) or (
+        "end" in rule and not isinstance(rule["end"], str)
+    ):
+        raise ValueError("boundary predicates must be strings")
     point = "epsilon_ns" in rule
     if set(rule) != ({"start", "epsilon_ns"} if point else {"start", "end"}):
         raise ValueError("invalid rule fields")
@@ -127,7 +151,14 @@ def main() -> None:
             json.loads(args.record.read_text()),
             args.date_zone,
         )
-    except (ValueError, KeyError, TypeError, OverflowError) as exc:
+    except (
+        ValueError,
+        KeyError,
+        TypeError,
+        OverflowError,
+        OSError,
+        UnicodeError,
+    ) as exc:
         parser.exit(2, f"valid-time projection refused: {exc}\n")
     print(json.dumps(output))
 
