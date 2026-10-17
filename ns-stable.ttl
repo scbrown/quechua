@@ -1867,4 +1867,4 @@
 <https://w3id.org/tallygraph/quechua/ns#year> <http://www.w3.org/2000/01/rdf-schema#label> "year" .
 <https://w3id.org/tallygraph/quechua/ns#year> <http://www.w3.org/2002/07/owl#deprecated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <https://w3id.org/tallygraph/quechua/ns> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
-<https://w3id.org/tallygraph/quechua/ns> <http://www.w3.org/2002/07/owl#versionInfo> "0.7.0" . # x-release-please-version
+<https://w3id.org/tallygraph/quechua/ns> <http://www.w3.org/2002/07/owl#versionInfo> "0.8.0" . # x-release-please-version

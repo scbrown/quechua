@@ -10,6 +10,19 @@ documentation fix is PATCH.
 `<https://scbrown.github.io/quechua/ns>`). CI refuses a version with no section
 here, and each release publishes that section as its notes.
 
+## [0.8.0](https://github.com/scbrown/quechua/compare/v0.7.0...v0.8.0) (2026-10-17)
+
+
+### Features
+
+* add candidate stable namespace representations ([#16](https://github.com/scbrown/quechua/issues/16)) ([04071d1](https://github.com/scbrown/quechua/commit/04071d1b4340692d0b33ed5aca856dd3b994efce))
+* **catalog:** scope DCAT query requirements to explicit profiles (aegis-mda) ([#19](https://github.com/scbrown/quechua/issues/19)) ([41a1c2e](https://github.com/scbrown/quechua/commit/41a1c2e05359c3b9cfb0091e6daf469604acc293))
+
+
+### Bug Fixes
+
+* synchronize candidate namespace release versions ([#18](https://github.com/scbrown/quechua/issues/18)) ([66d803e](https://github.com/scbrown/quechua/commit/66d803ec0c5b108ab5166e460ca5fe5390699661))
+
 ## [0.7.0](https://github.com/scbrown/quechua/compare/v0.6.1...v0.7.0) (2026-10-15)
 
 
